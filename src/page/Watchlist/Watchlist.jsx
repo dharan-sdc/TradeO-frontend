@@ -1,8 +1,60 @@
+import { AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Avatar } from '@radix-ui/react-avatar'
+import { BookmarkFilledIcon } from '@radix-ui/react-icons'
 import React from 'react'
 
 const Watchlist = () => {
+
+  const handleRemoveToWatchlist = (value) => {
+    console.log(value)
+  }
   return (
-    <div>Watchlist</div>
+    <div className='p-7 lg:p-20'>
+      <h1 className='font-bold text-3xl pb-10'>Watchlist</h1>
+      <div className="border border-gray-200 rounded overflow-hidden">
+        <Table>
+
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[250px]">Coin</TableHead>
+
+              <TableHead>Volume</TableHead>
+              <TableHead>Market Cap</TableHead>
+              <TableHead>24hrs</TableHead>
+              <TableHead className="">Price</TableHead>
+              <TableHead className="text-right text-red-600">Marked</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => <TableRow key={index}>
+              {/* <TableCell className="font-medium">Bitcoin</TableCell> */}
+              <TableCell className=" flex items-center gap-2">
+                <Avatar className='-z-50 w-8 h-8'>
+                  <AvatarImage src="https://assets.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400" />
+
+                </Avatar>
+                <span className='font-bold font-serif'>Bitcoin</span>
+
+              </TableCell>
+
+              <TableCell>4804198544404</TableCell>
+              <TableCell>158423828298773</TableCell>
+              <TableCell>-3.42638</TableCell>
+              <TableCell className="">$79,98,303.00</TableCell>
+              <TableCell className="text-right">
+                <Button variant="ghost" onClick={() => handleRemoveToWatchlist(item.id)} size="icon" className="h-10 w-10">
+                  <BookmarkFilledIcon className='w-6 h-6' />
+                </Button>
+              </TableCell>
+            </TableRow>)}
+
+          </TableBody>
+        </Table>
+      </div>
+
+    </div>
   )
 }
 

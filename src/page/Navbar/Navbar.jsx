@@ -48,8 +48,8 @@ const navbar = () => {
         </div>
       </div>
       <div>
-        <Avatar>
-          <AvatarFallback>
+        <Avatar className=''>
+          <AvatarFallback className="w-10 h-10">
             D
           </AvatarFallback>
         </Avatar>

@@ -19,7 +19,7 @@ const menu = [
   },
   {
     name: "Activity",
-    path: "/actvity",
+    path: "/activity",
     icon: <ActivityLogIcon className='h-6 w-6' />
   },
   {
