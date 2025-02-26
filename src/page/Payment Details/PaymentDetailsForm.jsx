@@ -12,6 +12,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { DialogClose } from '@/components/ui/dialog'
 
 const PaymentDetailsForm = () => {
   const form = useForm({
@@ -57,7 +58,7 @@ const PaymentDetailsForm = () => {
             name="ifsc"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Ifsc Code</FormLabel>
+                <FormLabel>IFSC Code</FormLabel>
                 <FormControl>
                   <Input
                     //name="ifsc"
@@ -125,9 +126,12 @@ const PaymentDetailsForm = () => {
 
             )}
           />
-          <Button type="submit" className="w-full py-5">
-            Add Payment Details
-          </Button>
+          <DialogClose className='w-full'>
+            <Button type="submit" className="w-full py-5">
+              Add Payment Details
+            </Button>
+          </DialogClose>
+
         </form>
       </Form>
     </div>

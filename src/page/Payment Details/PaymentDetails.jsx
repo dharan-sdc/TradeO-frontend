@@ -17,7 +17,7 @@ const PaymentDetails = () => {
     <div className='px-20'>
       <h1 className='text-3xl font-bold py-10'>Payment Details</h1>
 
-      <Card>
+      {false ? <Card>
         <CardHeader>
           <CardTitle>
             SDC Fund bank
@@ -37,9 +37,7 @@ const PaymentDetails = () => {
             <p className='text-gray-400'>: SDCFB000000013</p>
           </div>
         </CardContent>
-      </Card>
-
-      <Dialog >
+      </Card> : <Dialog >
         <DialogTrigger >
           <Button className='py-6 mt-2'>Add payment details</Button>
         </DialogTrigger>
@@ -50,7 +48,9 @@ const PaymentDetails = () => {
           </DialogHeader>
           <PaymentDetailsForm />
         </DialogContent>
-      </Dialog>
+      </Dialog>}
+
+
 
     </div>
   )
