@@ -24,7 +24,7 @@ function App() {
         <Route path='/activity' element={<Activity />} />
         <Route path='/wallet' element={<Wallet />} />
         <Route path='/withdrawal' element={<Withdrawal />} />
-        <Route path='/payment-deatils' element={<PaymentDetails />} />
+        <Route path='/payment-details' element={<PaymentDetails />} />
         <Route path='/market/:id' element={<StockDetails />} />
         <Route path='/watchlist' element={<Watchlist />} />
         <Route path='/profile' element={<Profile />} />
