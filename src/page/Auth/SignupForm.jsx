@@ -1,20 +1,20 @@
-
 import React from 'react'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 import { useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { DialogClose } from '@/components/ui/dialog'
+import { useDispatch } from 'react-redux'
+import { register } from '@/State/Auth/Action'
+
 
 const SignupForm = () => {
+  const dispatch = useDispatch()
   const form = useForm({
     resolver: "",
     defaultValues: {
@@ -25,6 +25,7 @@ const SignupForm = () => {
   })
 
   const onSubmit = (data) => {
+    dispatch(register(data))
     console.log(data)
   }
 

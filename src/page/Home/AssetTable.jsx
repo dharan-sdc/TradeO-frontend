@@ -1,43 +1,49 @@
 import { AvatarImage } from '@/components/ui/avatar'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Avatar } from '@radix-ui/react-avatar'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-const AssetTable = () => {
+const AssetTable = ({ coin, category }) => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   return (
     <Table>
+      <ScrollArea className={`${category == "all" ? "h-[74vh]" : "h-[82vh]"}`}>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[250px]">Coin</TableHead>
 
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[250px]">Coin</TableHead>
+            <TableHead>Volume</TableHead>
+            <TableHead>Market Cap</TableHead>
+            <TableHead>24hrs</TableHead>
+            <TableHead className="text-right">Price</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {coin.map((item) => <TableRow key={item.id}>
+            {/* <TableCell className="font-medium">Bitcoin</TableCell> */}
+            <TableCell onClick={() => navigate(`/market/${item.id}`)} className=" flex items-center gap-2">
+              <Avatar className='-z-50 w-8 h-8'>
+                <AvatarImage src={item.image} />
 
-          <TableHead>Volume</TableHead>
-          <TableHead>Market Cap</TableHead>
-          <TableHead>24hrs</TableHead>
-          <TableHead className="text-right">Price</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => <TableRow key={index}>
-          {/* <TableCell className="font-medium">Bitcoin</TableCell> */}
-          <TableCell onClick={() => navigate(`/market/bitcoin`)} className=" flex items-center gap-2">
-            <Avatar className='-z-50 w-8 h-8'>
-              <AvatarImage src="https://assets.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400" />
+              </Avatar>
+              <span className='font-bold font-serif'>{item.name}</span>
+              <span className='font-medium font-mono'>{item.symbol}</span>
+            </TableCell>
 
-            </Avatar>
-            <span className='font-bold font-serif'>Bitcoin</span>
-            <span className='font-medium font-mono'>BTN</span>
-          </TableCell>
+            <TableCell>{item.total_volume}</TableCell>
+            <TableCell>{item.market_cap}</TableCell>
+            <TableCell>{item.price_change_percentage_24h
+            }</TableCell>
+            <TableCell className="text-right">${item.current_price}</TableCell>
+          </TableRow>)}
 
-          <TableCell>4804198544404</TableCell>
-          <TableCell>158423828298773</TableCell>
-          <TableCell>-3.42638</TableCell>
-          <TableCell className="text-right">$79,98,303.00</TableCell>
-        </TableRow>)}
+        </TableBody>
+      </ScrollArea>
 
-      </TableBody>
     </Table>
 
 

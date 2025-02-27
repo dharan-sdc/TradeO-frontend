@@ -10,11 +10,41 @@ import {
 } from "@/components/ui/dialog"
 
 import { BookmarkFilledIcon, BookmarkIcon, DotIcon } from '@radix-ui/react-icons'
-import React from 'react'
+import React, { useEffect } from 'react'
 import TreadingForm from './TreadingForm'
 import StackChart from '../Home/StackChart'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { fetchCoinDetails } from '@/State/Coin/Action'
+import { store } from '@/State/Store'
+
+
+
+
 
 const StockDetails = () => {
+
+  const coin = useSelector(store => store.coin)
+
+  const dispatch = useDispatch()
+  const { id } = useParams()
+
+  useEffect(() => {
+    dispatch(fetchCoinDetails({ coinId: id, jwt: localStorage.getItem("jwt") }));
+  }, [id, dispatch]); // Added dispatch as a dependency
+
+  const dummyCoinData = {
+    image: { large: "https://th.bing.com/th?id=ODL.edfcf373d17146688b2c295935da724d&w=100&h=100&c=12&pcl=faf9f7&o=6&dpr=1.3&pid=AlgoBlockDebug" },  // Use a local default image
+    symbol: "BTC",
+    name: "Bitcoin",
+    market_data: {
+      current_price: { inr: 5000000 },
+      market_cap_change_24h: 20000,
+      market_cap_change_percentage_24h: 2.5,
+    },
+  };
+  const coinData = coin.coinDetails || dummyCoinData;
+
   return (
     <div className='p-5 mt-5'>
       <div className='flex justify-between'>
@@ -22,23 +52,22 @@ const StockDetails = () => {
 
           <div>
             <Avatar>
-              <AvatarImage src={
-                "https://assets.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400"
-              } />
+              <AvatarImage src={coinData?.image.large} />
+
             </Avatar>
           </div>
           <div>
             <div className='flex items-center gap-2'>
-              <p>BTC</p>
+              <p>{coinData?.symbol.toUpperCase()}</p>
               <DotIcon className='text-gray-400' />
-              <p className='text-gray-400'>Bitcoin</p>
+              <p className='text-gray-400'>{coinData?.name}</p>
 
             </div>
             <div className='flex items-end gap-2'>
-              <p className='text-xl font-bold'>$6554</p>
+              <p className='text-xl font-bold'>${coinData?.market_data.current_price.inr}</p>
               <p className='text-red-600'>
-                <span>-1319678935.578</span>
-                <span>(-0.29803%)</span>
+                <span>-{coinData?.market_data.market_cap_change_24h}</span>
+                <span>(-{coinData?.market_data.market_cap_change_percentage_24h}%)</span>
               </p>
 
             </div>
@@ -66,7 +95,7 @@ const StockDetails = () => {
         </div>
       </div>
       <div className='mt-14 '>
-        <StackChart />
+        <StackChart coinId={id} />
       </div>
 
     </div>

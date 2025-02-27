@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import React from 'react'
+import React, { useEffect } from 'react'
 import AssetTable from './AssetTable'
 import StackChart from './StackChart'
 import { Avatar } from '@radix-ui/react-avatar'
@@ -7,6 +7,8 @@ import { AvatarImage } from '@/components/ui/avatar'
 import { Cross1Icon, DotIcon } from '@radix-ui/react-icons'
 import { Gauge, Lightbulb, MessageCircle } from 'lucide-react'
 import { Input } from '@/components/ui/input'
+import { getCoinList, getTop50CoinList } from '@/State/Coin/Action'
+import { useDispatch, useSelector } from 'react-redux'
 
 
 
@@ -14,6 +16,9 @@ const Home = () => {
   const [category, setCategory] = React.useState("all");
   const [inputValue, setInputValue] = React.useState("");
   const [isBotRealease, setIsBotRealease] = React.useState(false)
+
+  const dispatch = useDispatch()
+  const { coin } = useSelector(store => store)
 
   const handleBotRealease = () => setIsBotRealease(!isBotRealease);
   const handleCategory = (value) => {
@@ -31,7 +36,13 @@ const Home = () => {
     setInputValue("")
   }
 
+  useEffect(() => {
+    dispatch(getTop50CoinList())
+  }, [category])
 
+  useEffect(() => {
+    dispatch(getCoinList(1))
+  }, [])
 
   return (
     <div className='relative'>
@@ -47,7 +58,7 @@ const Home = () => {
 
             <Button onClick={() => handleCategory("topLosers")} variant={category == "topLosers" ? "default" : "outline"} className="rounded-full">Top Lossable</Button>
           </div>
-          <AssetTable />
+          <AssetTable coin={category == "all" ? coin.coinList : coin.top50} category={category} />
         </div>
         <div className='hidden lg:block lg:w-[50%] p-5'>
           <StackChart />

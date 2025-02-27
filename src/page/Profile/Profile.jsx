@@ -13,8 +13,12 @@ import {
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import AccountVerificationForm from './AccountVerificationForm'
+import { useSelector } from 'react-redux'
+import { store } from '@/State/Store'
 
 const Profile = () => {
+  const { auth } = useSelector(store => store);
+
   const handleEnableTwoStepVerification = () => {
     console.log("Two Step Verification")
   }
@@ -31,38 +35,38 @@ const Profile = () => {
               <div className='space-y-7'>
                 <div className='flex'>
                   <p className='w-[9rem]'>Email:</p>
-                  <p className='text-gray-500'>SdcUser@gmail.com</p>
+                  <p className='text-gray-500'>{auth.user?.email}</p>
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>Full Name:</p>
-                  <p className='text-gray-500'>SdcUser01</p>
+                  <p className='text-gray-500'>{auth.user?.fullName}</p>
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>Date of Birth:</p>
-                  <p className='text-gray-500'>Feb 16,2004</p>
+                  <p className='text-gray-500'>NA</p>
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>Nationality:</p>
-                  <p className='text-gray-500'>indian</p>
+                  <p className='text-gray-500'>NA</p>
                 </div>
               </div>
               <br></br>
               <div className='space-y-7'>
                 <div className='flex'>
                   <p className='w-[9rem]'>Address:</p>
-                  <p className='text-gray-500'>SdcUser@gmail.com</p>
+                  <p className='text-gray-500'>NA</p>
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>City:</p>
-                  <p className='text-gray-500'>SdcUser01</p>
+                  <p className='text-gray-500'>NA</p>
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>postcode:</p>
-                  <p className='text-gray-500'>Feb 16,2004</p>
+                  <p className='text-gray-500'>NA</p>
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>Country:</p>
-                  <p className='text-gray-500'>indian</p>
+                  <p className='text-gray-500'>India</p>
                 </div>
               </div>
             </div>
