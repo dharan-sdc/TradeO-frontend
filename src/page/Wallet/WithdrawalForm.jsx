@@ -1,16 +1,22 @@
 import { Button } from '@/components/ui/button'
 import { DialogClose } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { store } from '@/State/Store'
+import { withdrawalRequest } from '@/State/Withdrawal/Action'
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 const WithdrawalForm = () => {
+  const dispatch = useDispatch()
+  const { wallet, withdrawal } = useSelector(store => store)
+
   const [amount, setAmount] = React.useState('')
 
   const handleChange = (e) => {
     setAmount(e.target.value)
   }
   const handleSubmit = () => {
-    // e.preventDefault();
+    dispatch(withdrawalRequest({ amount, jwt: localStorage.getItem("jwt") }))
     console.log(amount);
   }
   return (
@@ -40,8 +46,8 @@ const WithdrawalForm = () => {
         <div className='flex items-center gap-5 border px-5 py-2 rounded-md'>
           <img className='h-8 w-8' src="https://www.pngarts.com/files/6/Vector-Bank-PNG-Pic.png" alt="" />
           <div>
-            <p className='text-xl font-bold'>Yes Bank</p>
-            <p className='text-xs'>**************1651</p>
+            <p className='text-xl font-bold'>{withdrawal.paymentDetails?.bankName}</p>
+            <p className='text-xs'>{withdrawal.paymentDetails?.accountNumber}</p>
           </div>
         </div>
       </div>

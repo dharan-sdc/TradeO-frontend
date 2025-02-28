@@ -38,9 +38,9 @@ const StockDetails = () => {
     symbol: "BTC",
     name: "Bitcoin",
     market_data: {
-      current_price: { inr: 5000000 },
-      market_cap_change_24h: 20000,
-      market_cap_change_percentage_24h: 2.5,
+      current_price: { inr: 9999 },
+      market_cap_change_24h: 9999,
+      market_cap_change_percentage_24h: 0.0987,
     },
   };
   const coinData = coin.coinDetails || dummyCoinData;

@@ -1,4 +1,14 @@
 import { Button } from '@/components/ui/button'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+
 import React, { useEffect } from 'react'
 import AssetTable from './AssetTable'
 import StackChart from './StackChart'
@@ -59,9 +69,29 @@ const Home = () => {
             <Button onClick={() => handleCategory("topLosers")} variant={category == "topLosers" ? "default" : "outline"} className="rounded-full">Top Lossable</Button>
           </div>
           <AssetTable coin={category == "all" ? coin.coinList : coin.top50} category={category} />
+          <div>
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious href="#" />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#">1</PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationNext href="#" />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+
+          </div>
+
         </div>
         <div className='hidden lg:block lg:w-[50%] p-5'>
-          <StackChart />
+          <StackChart coinId={"bitcoin"} />
 
           <div className="flex gap-5 items-center">
             <div>

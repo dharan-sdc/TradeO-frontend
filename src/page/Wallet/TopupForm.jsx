@@ -2,11 +2,14 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { paymentHandler } from '@/State/Wallet/Action'
 import { DotFilledIcon } from '@radix-ui/react-icons'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 
 const TopupForm = () => {
   const [amount, setAmount] = React.useState('')
+  const dispatch = useDispatch()
   const [paymentMethod, setPaymentMethod] = React.useState("RAZORPAY")
   const handlePaymentMethodChange = (value) => {
     setPaymentMethod(value)
@@ -15,7 +18,11 @@ const TopupForm = () => {
     setAmount(e.target.value)
   }
   const handleSubmit = () => {
-    // e.preventDefault();
+    dispatch(paymentHandler({
+      jwt: localStorage.getItem("jwt"),
+      paymentMethod,
+      amount
+    }))
     console.log(amount, paymentMethod);
   }
   return (

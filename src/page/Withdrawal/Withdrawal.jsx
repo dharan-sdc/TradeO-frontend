@@ -1,11 +1,18 @@
-import { AvatarImage } from '@/components/ui/avatar'
 
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Avatar } from '@radix-ui/react-avatar'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { store } from '@/State/Store';
+import { getWithdrawalHistory } from '@/State/Withdrawal/Action';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
 
-import React from 'react'
 
 const Withdrawal = () => {
+  const dispatch = useDispatch();
+  const { wallet, withdrawal } = useSelector(store => store)
+
+  useEffect(() => {
+    dispatch(getWithdrawalHistory(localStorage.getItem("jwt")))
+  }, [])
   return (
     <div className='p-7 lg:p-20'>
       <h1 className='font-bold text-3xl pb-10'>Withdrawal Menu</h1>
@@ -22,18 +29,18 @@ const Withdrawal = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {[1, 1, 1].map((item, index) => <TableRow key={index}>
+            {withdrawal.history.map((item, index) => <TableRow key={index}>
               {/* <TableCell className="font-medium">Bitcoin</TableCell> */}
               <TableCell>
-                <p>July 13,2003 <span>at</span> 11:32 </p>
+                <p>{item.date.toString()}</p>
 
               </TableCell>
 
 
               <TableCell>Bank Account</TableCell>
-              <TableCell>420</TableCell>
+              <TableCell>${item.amount}</TableCell>
               <TableCell className="text-right">
-                345
+                {item.status}
               </TableCell>
             </TableRow>)}
 

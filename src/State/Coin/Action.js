@@ -58,7 +58,8 @@ export const fetchMarketChart = ({ coinId, days, jwt }) => async (dispatch) => {
   dispatch({ type: FETCH_MARKET_CHART_REQUEST });
 
   try {
-    const response = await api.get(`/coins/${coinId}/chart?days=${days}`, {
+    const validDays = days && typeof days === "number" ? days : 7;
+    const response = await api.get(`/coins/${coinId}/chart?days=${validDays}`, {
       headers: {
         Authorization: `Bearer ${jwt}`
       }
