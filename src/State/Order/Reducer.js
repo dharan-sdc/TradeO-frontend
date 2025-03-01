@@ -26,14 +26,14 @@ const orderReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       }
-    case PAY_ORDER_SUCCESS:
-    case GET_ORDER_SUCCESS:
-      return {
-        ...state,
-        order: action.payload,
-        loading: false,
-        error: null,
-      }
+    // case PAY_ORDER_SUCCESS:
+    // case GET_ORDER_SUCCESS:
+    //   return {
+    //     ...state,
+    //     order: action.payload,
+    //     loading: false,
+    //     error: null,
+    //   }
 
     case GET_ALL_ORDERS_SUCCESS:
       return {

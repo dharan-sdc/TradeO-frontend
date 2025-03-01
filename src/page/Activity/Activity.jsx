@@ -1,11 +1,20 @@
 import { AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { getAllOrdersForUser } from '@/State/Order/Action'
+import { calculateProfit } from '@/Utilis/calculateProfit'
 import { Avatar } from '@radix-ui/react-avatar'
 import { BookmarkFilledIcon } from '@radix-ui/react-icons'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Activity = () => {
+  const dispatch = useDispatch()
+  const order = useSelector(store => store)
+
+  useEffect(() => {
+    dispatch(getAllOrdersForUser({ jwt: localStorage.getItem('jwt') }))
+  }, [])
   return (
     <div className='p-7 lg:p-20'>
       <h1 className='font-bold text-3xl pb-10'>Activity Space</h1>
@@ -25,7 +34,7 @@ const Activity = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => <TableRow key={index}>
+            {order.orders.map((item, index) => <TableRow key={index}>
               {/* <TableCell className="font-medium">Bitcoin</TableCell> */}
               <TableCell>
                 <p>13/07/2003</p>
@@ -34,19 +43,19 @@ const Activity = () => {
               <TableCell className=" flex items-center gap-2">
 
                 <Avatar className='-z-50 w-8 h-8'>
-                  <AvatarImage src="https://assets.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400" />
+                  <AvatarImage src={item.orderItem.coin.image} />
 
                 </Avatar>
-                <span className='font-bold font-serif'>Bitcoin</span>
+                <span className='font-bold font-serif'>{item.orderItem.coin.name}</span>
 
               </TableCell>
 
-              <TableCell>4804198544404</TableCell>
-              <TableCell>158423828298773</TableCell>
-              <TableCell>-3.42638</TableCell>
-              <TableCell>158423828298773</TableCell>
+              <TableCell>{item.orderItem.buyPrice}</TableCell>
+              <TableCell>{item.orderItem.sellPrice}</TableCell>
+              <TableCell>{item.orderType}</TableCell>
+              <TableCell> {calculateProfit(item)}</TableCell>
               <TableCell className="text-right">
-                345
+                {item.price}
               </TableCell>
             </TableRow>)}
 

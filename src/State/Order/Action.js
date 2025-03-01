@@ -1,4 +1,5 @@
 
+import api from "@/Config/api";
 import { GET_ALL_ORDERS_FAILURE, GET_ALL_ORDERS_REQUEST, GET_ALL_ORDERS_SUCCESS, GET_ORDER_FAILURE, GET_ORDER_REQUEST, GET_ORDER_SUCCESS, PAY_ORDER_FAILURE, PAY_ORDER_REQUEST, PAY_ORDER_SUCCESS } from "./ActionType"
 
 export const payOrder = ({ jwt, orderData, amount }) => async (dispatch) => {

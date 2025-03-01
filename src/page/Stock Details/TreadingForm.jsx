@@ -1,83 +1,140 @@
-import { Input } from '@/components/ui/input'
-import { Avatar, AvatarImage } from '@/components/ui/avatar'
-import { DotIcon } from '@radix-ui/react-icons'
-import React, { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { DotIcon } from '@radix-ui/react-icons';
+import React, { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { useDispatch, useSelector } from 'react-redux';
+import { getWalletTransaction } from '@/State/Wallet/Action';
+import { getAssetDetails } from '@/State/Asset/Action';
+import { payOrder } from '@/State/Order/Action'; // Assuming payOrder is correctly imported
 
 const TreadingForm = () => {
-  const [orderType, setOrderType] = useState("BUY")
-  const handleChange = () => {
+  const [orderType, setOrderType] = useState("BUY");
+  const [amount, setAmount] = useState(0);
+  const [quantity, setQuantity] = useState(0);
+  const dispatch = useDispatch();
 
-  }
+  const { coin, wallet, asset } = useSelector(state => ({
+    coin: state.coin,
+    wallet: state.wallet,
+    asset: state.asset
+  }));
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+
+    if (jwt) {
+      dispatch(getWalletTransaction({ jwt }));
+
+      if (coin?.coinDetails?.id) {
+        dispatch(getAssetDetails({ coinId: coin.coinDetails.id, jwt }));
+      }
+    }
+  }, [dispatch, coin]); // Added `coin` to ensure re-fetching if `coin` updates
+
+  const handleChange = (e) => {
+    const amount = parseFloat(e.target.value) || 0;
+    setAmount(amount);
+
+    // Use real-time market price if available; otherwise, use fallback value
+    const price = coin?.coinDetails?.market_data?.current_price?.inr || 6554;
+    setQuantity((amount / price).toFixed(5));
+  };
+
+  const handleBuyCrypto = () => {
+    const jwt = localStorage.getItem("jwt");
+
+    if (!jwt) {
+      console.warn("JWT token missing. Authentication required.");
+      return;
+    }
+
+    const price = coin?.coinDetails?.market_data?.current_price?.inr || 6554;
+    const calculatedQuantity = (amount / price).toFixed(5);
+
+    dispatch(
+      payOrder({
+        jwt,
+        amount,
+        orderData: {
+          coinId: coin?.coinDetails?.id,
+          quantity: calculatedQuantity,
+          orderType,
+        },
+      })
+    );
+  };
+
   return (
-    <div className='space-y-10 p-5'>
+    <div className="space-y-10 p-5">
+      {/* Amount Input */}
       <div>
-        <div className='flex gap-4 items-center justify-between'>
+        <div className="flex gap-4 items-center justify-between">
           <Input
             className="py-7 focus:outline-none"
             placeholder="Enter Amount ..."
+            onChange={handleChange}
             type="number"
             name="amount"
           />
           <div>
-            <p className='border text-2xl flex justify-center items-center w-36 h-14 rounded-md'>4563</p>
-          </div>
-        </div>
-        {false && <h1 className='text-red-500 text-center pt-4'>Insufficent wallet balance to buy</h1>}
-      </div>
-
-      <div className='flex gap-5 items-center'>
-
-        <div>
-          <Avatar>
-            <AvatarImage src={
-              "https://assets.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400"
-            } />
-          </Avatar>
-        </div>
-        <div>
-          <div className='flex items-center gap-2'>
-            <p>BTC</p>
-            <DotIcon className='text-gray-400' />
-            <p className='text-gray-400'>Bitcoin</p>
-
-          </div>
-          <div className='flex items-end gap-2'>
-            <p className='text-xl font-bold'>$6554</p>
-            <p className='text-green-600'>
-              <span>-1319678935.578</span>
-              <span>(-0.29803%)</span>
+            <p className="border text-2xl flex justify-center items-center w-36 h-14 rounded-md">
+              {quantity}
             </p>
-
           </div>
         </div>
-
       </div>
 
-      <div className='flex items-center justify-between'>
+      {/* Crypto Display */}
+      <div className="flex gap-5 items-center">
+        <Avatar>
+          <AvatarImage
+            src={"https://assets.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400"}
+          />
+        </Avatar>
+        <div>
+          <div className="flex items-center gap-2">
+            <p>BTC</p>
+            <DotIcon className="text-gray-400" />
+            <p className="text-gray-400">Bitcoin</p>
+          </div>
+          <div className="flex items-end gap-2">
+            <p className="text-xl font-bold">
+              ₹{coin?.coinDetails?.market_data?.current_price?.inr || "6554"}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Order Details */}
+      <div className="flex items-center justify-between">
         <p>Order Type</p>
         <p>Market Order</p>
       </div>
 
-      <div className='flex items-center justify-between'>
-        <p>{orderType == "BUY" ? "Available Case" : "Available Quantity"}</p>
-        <p>{orderType == "BUY" ? 9000 : 23.45}</p>
+      <div className="flex items-center justify-between">
+        <p>{orderType === "BUY" ? "Available Balance" : "Available Quantity"}</p>
+        <p>{orderType === "BUY" ? `₹${wallet?.userWallet?.balance || 0}` : asset?.assetDetails?.quantity || 0}</p>
       </div>
+
+      {/* Buy/Sell Buttons */}
       <div>
-        <Button className={`w-full py-6
-          ${orderType == "SELL" ? "bg-red-600 text-white" : ""}`}>
+        <Button
+          onClick={handleBuyCrypto}
+          className={`w-full py-6 ${orderType === "SELL" ? "bg-red-600 text-white" : ""}`}
+        >
           {orderType}
         </Button>
         <Button
           variant="link"
           className="w-full mt-5 text-xl text-slate-600"
-          onClick={() => setOrderType(orderType == "BUY" ? "SELL" : "BUY")}>
-          {orderType == "BUY" ? "Or Sell" : "Or Buy"}
+          onClick={() => setOrderType(orderType === "BUY" ? "SELL" : "BUY")}
+        >
+          {orderType === "BUY" ? "Or Sell" : "Or Buy"}
         </Button>
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default TreadingForm
+export default TreadingForm;

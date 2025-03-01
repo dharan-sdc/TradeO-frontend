@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { fetchCoinDetails } from '@/State/Coin/Action'
 import { store } from '@/State/Store'
+import { addItemToWatchlist } from '@/State/Watchlist/Action'
+import { exitInWatchlist } from '@/Utilis/existInWatchlist'
 
 
 
@@ -24,13 +26,15 @@ import { store } from '@/State/Store'
 
 const StockDetails = () => {
 
-  const coin = useSelector(store => store.coin)
+  const { coin } = useSelector(store => store.coin)
+  const { watchlist } = useSelector(store => store)
 
   const dispatch = useDispatch()
   const { id } = useParams()
 
   useEffect(() => {
     dispatch(fetchCoinDetails({ coinId: id, jwt: localStorage.getItem("jwt") }));
+    dispatch(getUserWatchlist(localStorage.getItem("jwt")))
   }, [id, dispatch]); // Added dispatch as a dependency
 
   const dummyCoinData = {
@@ -43,7 +47,11 @@ const StockDetails = () => {
       market_cap_change_percentage_24h: 0.0987,
     },
   };
-  const coinData = coin.coinDetails || dummyCoinData;
+  const coinData = coin?.coinDetails || dummyCoinData;
+
+  const handleAddToWatchlist = () => {
+    dispatch(addItemToWatchlist({ coinId: coin.coinDetails?.id, jwt: localStorage.getItem("jwt") }))
+  }
 
   return (
     <div className='p-5 mt-5'>
@@ -76,8 +84,14 @@ const StockDetails = () => {
         </div>
 
         <div className='flex items-center gap-4'>
-          <Button>
-            {true ? (<BookmarkFilledIcon className='h-6 w-6' />) : (<BookmarkIcon className='h-6 w-6' />)}
+          <Button onClick={handleAddToWatchlist}>
+
+            {exitInWatchlist(watchlist?.item, coin?.coinDetails) ?
+              (<BookmarkFilledIcon className='h-6 w-6' />)
+              : (<BookmarkIcon className='h-6 w-6' />)
+            }
+
+
           </Button>
           <Dialog>
             <DialogTrigger>
