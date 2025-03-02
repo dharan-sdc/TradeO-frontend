@@ -4,7 +4,7 @@ import { existInWatchlist } from "@/Utilis/existInWatchlist";
 import { ADD_COIN_TO_WATCHLIST_FAILURE, ADD_COIN_TO_WATCHLIST_REQUEST, ADD_COIN_TO_WATCHLIST_SUCCESS, GET_USER_WATCHLIST_FAILURE, GET_USER_WATCHLIST_REQUEST, GET_USER_WATCHLIST_SUCCESS } from "./ActionType"
 
 const initialState = {
-  watchlist: [],
+  watchlist: null,
   loading: false,
   error: null,
   items: [],
@@ -28,15 +28,17 @@ const watchlistReducer = (state = initialState, action) => {
         error: null,
       }
     case ADD_COIN_TO_WATCHLIST_SUCCESS:
-      let updatedItems = existInWatchlist(state.items, action.payload) ? state.items.filter((item) => item?.id !== action.payload?.id)
+      let updatedItems = existInWatchlist(state.items || [], action.payload)
+        ? state.items.filter((item) => item?.id !== action.payload?.id)
+        : [action.payload, ...(state.items || [])];
 
-        : [action.payload, ...state.items]
       return {
         ...state,
         items: updatedItems,
         loading: false,
         error: null,
       };
+
     case GET_USER_WATCHLIST_FAILURE:
     case ADD_COIN_TO_WATCHLIST_FAILURE:
       return {

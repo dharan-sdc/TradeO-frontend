@@ -3,14 +3,14 @@ import api from "@/Config/api";
 import { ADD_COIN_TO_WATCHLIST_FAILURE, ADD_COIN_TO_WATCHLIST_REQUEST, ADD_COIN_TO_WATCHLIST_SUCCESS, GET_USER_WATCHLIST_FAILURE, GET_USER_WATCHLIST_REQUEST, GET_USER_WATCHLIST_SUCCESS } from "./ActionType"
 
 
-export const getUserWatchlist = () => async (dispatch) => {
 
+export const getUserWatchlist = (jwt) => async (dispatch) => {
   dispatch({ type: GET_USER_WATCHLIST_REQUEST });
 
   try {
     const response = await api.get('/api/watchlist/user',
       {
-        Headers: {
+        headers: {
           Authorization: `Bearer ${jwt}`,
         }
       }
@@ -33,7 +33,7 @@ export const addItemToWatchlist = ({ coinId, jwt }) => async (dispatch) => {
 
   try {
     const response = await api.patch(`/api/watchlist/add/coin/${coinId}`, {}, {
-      Headers: {
+      headers: {
         Authorization: `Bearer ${jwt}`,
       }
     });

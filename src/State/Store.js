@@ -7,8 +7,9 @@ import walletReducer from "./Wallet/Reducer";
 import withdrawalReducer from "./Withdrawal/Reducer";
 import orderReducer from "./Order/Reducer";
 import assetReducer from "./Asset/Reducer";
-import Watchlist from "@/page/Watchlist/Watchlist";
 import watchlistReducer from "./Watchlist/Reducer";
+
+
 
 
 
@@ -20,7 +21,7 @@ const rootReducer = combineReducers({
   withdrawal: withdrawalReducer,
   order: orderReducer,
   asset: assetReducer,
-  Watchlist: watchlistReducer
+  watchlist: watchlistReducer,
 
 });
 

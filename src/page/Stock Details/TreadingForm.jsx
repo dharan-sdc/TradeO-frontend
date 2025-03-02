@@ -23,23 +23,28 @@ const TreadingForm = () => {
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
 
-    if (jwt) {
-      dispatch(getWalletTransaction({ jwt }));
+    dispatch(getWalletTransaction({ jwt }));
 
-      if (coin?.coinDetails?.id) {
-        dispatch(getAssetDetails({ coinId: coin.coinDetails.id, jwt }));
-      }
+    if (coin?.coinDetails?.id) {
+      dispatch(getAssetDetails({ coinId: coin.coinDetails.id, jwt }));
     }
-  }, [dispatch, coin]); // Added `coin` to ensure re-fetching if `coin` updates
+  }, []);
 
   const handleChange = (e) => {
     const amount = parseFloat(e.target.value) || 0;
     setAmount(amount);
 
-    // Use real-time market price if available; otherwise, use fallback value
-    const price = coin?.coinDetails?.market_data?.current_price?.inr || 6554;
-    setQuantity((amount / price).toFixed(5));
+    const volume = calculateBuyCost(
+      amount, coin?.coinDetails?.market_data?.current_price?.inr)
+    setQuantity(volume);
   };
+
+  const calculateBuyCost = (amount, price) => {
+    let volume = amount / price;
+    let decimalPlaces = Math.max(2, price.toString().split(".").length)
+
+    return volume.toFixed(decimalPlaces)
+  }
 
   const handleBuyCrypto = () => {
     const jwt = localStorage.getItem("jwt");
@@ -89,14 +94,14 @@ const TreadingForm = () => {
       <div className="flex gap-5 items-center">
         <Avatar>
           <AvatarImage
-            src={"https://assets.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400"}
+            src={coin?.coinDetails?.image.large}
           />
         </Avatar>
         <div>
           <div className="flex items-center gap-2">
             <p>BTC</p>
             <DotIcon className="text-gray-400" />
-            <p className="text-gray-400">Bitcoin</p>
+            <p className="text-gray-400">{coin.coinDetails?.name}</p>
           </div>
           <div className="flex items-end gap-2">
             <p className="text-xl font-bold">
@@ -114,7 +119,7 @@ const TreadingForm = () => {
 
       <div className="flex items-center justify-between">
         <p>{orderType === "BUY" ? "Available Balance" : "Available Quantity"}</p>
-        <p>{orderType === "BUY" ? `₹${wallet?.userWallet?.balance || 0}` : asset?.assetDetails?.quantity || 0}</p>
+        <p>{orderType === "BUY" ? `₹${wallet?.userWallet?.balance || 0}` : (asset?.assetDetails?.quantity || 0)}</p>
       </div>
 
       {/* Buy/Sell Buttons */}

@@ -27,7 +27,7 @@ const TransferForm = () => {
         purpose: formData.purpose,
       }
     }))
-    console.log(formData);
+    console.log("Money sented to :  ", formData);
   }
   return (
     <div className='pt-10 space-y-5'>

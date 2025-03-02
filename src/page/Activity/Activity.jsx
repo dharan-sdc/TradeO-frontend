@@ -10,11 +10,13 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const Activity = () => {
   const dispatch = useDispatch()
-  const order = useSelector(store => store)
+  const order = useSelector(store => store.order)
 
   useEffect(() => {
     dispatch(getAllOrdersForUser({ jwt: localStorage.getItem('jwt') }))
   }, [])
+
+  console.log("test 01 ; ", order.orders)
   return (
     <div className='p-7 lg:p-20'>
       <h1 className='font-bold text-3xl pb-10'>Activity Space</h1>
@@ -30,15 +32,16 @@ const Activity = () => {
               <TableHead>Sell Price</TableHead>
               <TableHead>Order Type</TableHead>
               <TableHead >Profit & Loss</TableHead>
-              <TableHead className="text-right" >Value</TableHead>
+              <TableHead>Hold Volume</TableHead>
+              <TableHead className="text-right" >Price</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {order.orders.map((item, index) => <TableRow key={index}>
+            {order.orders?.slice().reverse().map((item, index) => <TableRow key={index}>
               {/* <TableCell className="font-medium">Bitcoin</TableCell> */}
               <TableCell>
-                <p>13/07/2003</p>
-                <p className='text-gray-400'>07:22</p>
+                <p>{item.timestamp.toString().split('T')[0]}</p>
+                <p className='text-gray-400'>{item.timestamp.toString().split('T')[1].split('.')[0]}</p>
               </TableCell>
               <TableCell className=" flex items-center gap-2">
 
@@ -54,6 +57,7 @@ const Activity = () => {
               <TableCell>{item.orderItem.sellPrice}</TableCell>
               <TableCell>{item.orderType}</TableCell>
               <TableCell> {calculateProfit(item)}</TableCell>
+              <TableCell>{item.orderItem?.quantity}</TableCell>
               <TableCell className="text-right">
                 {item.price}
               </TableCell>

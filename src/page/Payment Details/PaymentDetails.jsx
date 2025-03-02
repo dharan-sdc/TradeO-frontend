@@ -26,22 +26,30 @@ const PaymentDetails = () => {
   console.log("Payment --- ", withdrawal.paymentDetails)
   return (
     <div className='px-20'>
-      <h1 className='text-3xl font-bold py-10'>Payment Details</h1>
+      <h1 className='text-3xl font-bold py-10'>TradeO Deposit Fund Bank Details</h1>
 
       {withdrawal.paymentDetails ? (<Card>
         <CardHeader>
-          <CardTitle>
-            SDC Fund bank
+          <CardTitle className="mb">
+            Payment Details
           </CardTitle>
           <CardDescription>
-            A/C no :
-            {withdrawal.paymentDetails?.accountNumber}
+            <div className='flex items-center' >
+              <p className='w-32'>Account Number</p>
+              <p className='text-gray-400'>: {withdrawal.paymentDetails?.accountNumber
+                ? `**** **** **** ${withdrawal.paymentDetails.accountNumber.slice(-4)}`
+                : 'N/A'}</p>
+            </div>
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className='flex items-center' >
-            <p className='w-32'>A/C Holder</p>
+            <p className='w-32'>A/C Holder Name</p>
             <p className='text-gray-400'>: {withdrawal.paymentDetails?.accountHolderName}</p>
+          </div>
+          <div className='flex items-center'>
+            <p className='w-32'>Bank Name</p>
+            <p className='text-gray-400'>: {withdrawal.paymentDetails?.bankName}</p>
           </div>
           <div className='flex items-center'>
             <p className='w-32'>IFSC</p>
@@ -59,11 +67,12 @@ const PaymentDetails = () => {
           </DialogHeader>
           <PaymentDetailsForm />
         </DialogContent>
-      </Dialog>)}
+      </Dialog>)
+      }
 
 
 
-    </div>
+    </div >
   )
 }
 

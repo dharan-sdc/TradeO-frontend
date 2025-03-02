@@ -23,7 +23,7 @@ const WithdrawalForm = () => {
     <div className='pt-10 space-y-5'>
       <div className='flex justify-between items-center rounded-md bg-gray-400 text-xl font-bold px-5 py-4'>
         <p>Available Balance</p>
-        <p>$45000</p>
+        <p>$ {wallet.userWallet.balance}</p>
 
       </div>
       <div className='flex flex-col items-center'>
@@ -47,7 +47,9 @@ const WithdrawalForm = () => {
           <img className='h-8 w-8' src="https://www.pngarts.com/files/6/Vector-Bank-PNG-Pic.png" alt="" />
           <div>
             <p className='text-xl font-bold'>{withdrawal.paymentDetails?.bankName}</p>
-            <p className='text-xs'>{withdrawal.paymentDetails?.accountNumber}</p>
+            <p className='text-xs'>{withdrawal.paymentDetails?.accountNumber
+              ? `**** **** **** ${withdrawal.paymentDetails.accountNumber.slice(-4)}`
+              : 'N/A'}</p>
           </div>
         </div>
       </div>

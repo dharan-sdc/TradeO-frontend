@@ -20,15 +20,18 @@ function useQuery() {
 
 const Wallet = () => {
   const dispatch = useDispatch()
-  const { wallet } = useSelector(store => store)
+  const wallet = useSelector(store => store.wallet)
+
   const query = useQuery()
   const orderId = query.get("order_id");
   const razorpayPaymentId = query.get("razorpay_payment_id")
+
   const navigate = useNavigate()
 
   const handleFetchUserWallet = () => {
     dispatch(getUserWallet(localStorage.getItem("jwt")));
   }
+
   useEffect(() => {
     handleFetchUserWallet();
     handleFetchWalletTransaction()
@@ -48,8 +51,8 @@ const Wallet = () => {
   const handleFetchWalletTransaction = () => {
     dispatch(getWalletTransaction({ jwt: localStorage.getItem("jwt") }))
   }
-
-  console.log("Wallet Balance:", wallet.userWallet.amount);
+  console.log("Wallet transaction -- ", wallet.transactions)
+  console.log("Wallet Balance:", wallet?.userWallet.amount);
 
   return (
     <div className="flex flex-col items-center">
@@ -140,33 +143,40 @@ const Wallet = () => {
             </div>
           </CardContent>
         </Card>
+
+
         <div className="py-5 pt-10">
           <div className="flex gap-2 items-center pb-5">
             <h1 className="text-2xl font-semibold pb-1">History</h1>
-            <UpdateIcon className="h-6 w-6 p-0 cursor-pointer hover:text-red-500" />
+            <UpdateIcon onClick={handleFetchWalletTransaction} className="h-6 w-6 p-0 cursor-pointer hover:text-red-500" />
 
           </div>
           <div className="space-y-5">
-
-            {wallet.transactions.map((item, i) => <div key={i}>
-              <Card className=" px-5 flex justify-between items-center p-2" >
-                <div className="flex items-center gap-5">
-                  <Avatar onClick={handleFetchWalletTransaction}>
-                    <AvatarFallback>
-                      <ShuffleIcon className="w-9 h-6" />
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="space-y-1">
-                    <h1>{item.type || item.purpose}</h1>
-                    <p className="text-sm text-blue-500">{item.date}</p>
-
-                  </div>
+            {wallet.transactions?.length != 0 ? (
+              wallet.transactions.slice().reverse().map((item, i) => (
+                <div key={i}>
+                  <Card className="px-5 flex justify-between items-center p-2">
+                    <div className="flex items-center gap-5">
+                      <Avatar onClick={handleFetchWalletTransaction}>
+                        <AvatarFallback>
+                          <ShuffleIcon className="w-9 h-6" />
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="space-y-1">
+                        <h1>{item.purpose}</h1>
+                        <p className={`text-green-600`}>{item.transactionType}</p>
+                        <p className="text-sm text-gray-500">{item.transactionDate.split("T")[0]}</p>
+                      </div>
+                    </div>
+                    <div>
+                      <p className={`text-green-600`}>{item.amount} INR</p>
+                    </div>
+                  </Card>
                 </div>
-                <div>
-                  <p className={`text-green-600`}>{item.amount} INR</p>
-                </div>
-              </Card>
-            </div>)}
+              ))
+            ) : (
+              <p className="text-gray-500">No transactions found</p>
+            )}
 
           </div>
         </div>

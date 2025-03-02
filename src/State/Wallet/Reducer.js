@@ -22,7 +22,7 @@ const walletReducer = (state = initialState, action) => {
     case types.GET_WALLET_TRANSACTION_SUCCESS:
       return {
         ...state,
-        transaction: action.payload,
+        transactions: action.payload,
         loading: false,
         error: null
       };
