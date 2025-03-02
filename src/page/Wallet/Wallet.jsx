@@ -13,6 +13,8 @@ import { useEffect } from "react"
 import { depositeMoney, getUserWallet, getWalletTransaction } from "@/State/Wallet/Action"
 import { store } from "@/State/Store"
 import { useLocation, useNavigate } from "react-router-dom"
+import { getAllOrdersForUser } from "@/State/Order/Action"
+import { getPaymentDetails } from "@/State/Withdrawal/Action"
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -21,7 +23,8 @@ function useQuery() {
 const Wallet = () => {
   const dispatch = useDispatch()
   const wallet = useSelector(store => store.wallet)
-
+  const withdrawal = useSelector(store => store.withdrawal)
+  const order = useSelector(store => store.order)
   const query = useQuery()
   const orderId = query.get("order_id");
   const razorpayPaymentId = query.get("razorpay_payment_id")
@@ -33,8 +36,10 @@ const Wallet = () => {
   }
 
   useEffect(() => {
+    dispatch(getPaymentDetails({ jwt: localStorage.getItem("jwt") }))
     handleFetchUserWallet();
     handleFetchWalletTransaction()
+    dispatch(getAllOrdersForUser({ jwt: localStorage.getItem('jwt') }));
   }, []);
 
   useEffect(() => {
@@ -61,7 +66,7 @@ const Wallet = () => {
           <CardHeader className="pb-9">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-5">
-                <WalletIcon size={30} />
+                <WalletIcon size={30} className="text-orange-400" />
                 <div>
                   <CardTitle className="text-2xl">My PigBank Wallet</CardTitle>
                   <div className="flex items-center gap-2">
@@ -83,8 +88,8 @@ const Wallet = () => {
 
           <CardContent>
             <div className="flex items-center">
-              <IndianRupeeIcon size={24} className="text-blue-400" />
-              <span className="text-2xl font-semibold text-red-400">
+              <IndianRupeeIcon size={24} className="text-slate-600" />
+              <span className="text-2xl font-semibold text-slate-400">
                 {wallet.userWallet.balance}
               </span>
 
@@ -117,7 +122,7 @@ const Wallet = () => {
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>
-                      Request withfrawal
+                      Request withdrawal Money
                     </DialogTitle>
                   </DialogHeader>
                   <WithdrawalForm />
@@ -151,34 +156,108 @@ const Wallet = () => {
             <UpdateIcon onClick={handleFetchWalletTransaction} className="h-6 w-6 p-0 cursor-pointer hover:text-red-500" />
 
           </div>
+          {/* 
           <div className="space-y-5">
-            {wallet.transactions?.length != 0 ? (
-              wallet.transactions.slice().reverse().map((item, i) => (
-                <div key={i}>
-                  <Card className="px-5 flex justify-between items-center p-2">
-                    <div className="flex items-center gap-5">
-                      <Avatar onClick={handleFetchWalletTransaction}>
-                        <AvatarFallback>
-                          <ShuffleIcon className="w-9 h-6" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="space-y-1">
-                        <h1>{item.purpose}</h1>
-                        <p className={`text-green-600`}>{item.transactionType}</p>
-                        <p className="text-sm text-gray-500">{item.transactionDate.split("T")[0]}</p>
+            {order.orders?.length > 0 || wallet.transactions?.length > 0 ? (
+              <>
+               
+                {order.orders?.length > 0 ? (
+                  order.orders
+                    .slice()
+                    .reverse()
+                    .map((item, index) => (
+                      <div key={index}>
+                        <Card className="px-5 flex justify-between items-center p-2">
+                          <div className="flex items-center gap-5">
+                            <Avatar>
+                              <AvatarFallback>
+                                <ShuffleIcon className="w-9 h-6" />
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="space-y-1">
+                              <h1>{item.orderType}</h1>
+                              <p className={`text-blue-600`}>{item.status}</p>
+                              <p className="text-sm text-gray-500">{item.timestamp.split("T")[0]}</p>
+                            </div>
+                          </div>
+                          <div>
+                            <p className={`text-blue-600`}>{item.price} INR</p>
+                          </div>
+                        </Card>
                       </div>
-                    </div>
-                    <div>
-                      <p className={`text-green-600`}>{item.amount} INR</p>
-                    </div>
-                  </Card>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500">No transactions found</p>
-            )}
+                    ))
+                ) : (
+                  <p className="text-gray-500">No orders found</p>
+                )}
 
+               
+                {wallet.transactions?.length > 0 ? (
+                  wallet.transactions
+                    .slice()
+                    .reverse()
+                    .map((item, i) => (
+                      <div key={i}>
+                        <Card className="px-5 flex justify-between items-center p-2">
+                          <div className="flex items-center gap-5">
+                            <Avatar onClick={handleFetchWalletTransaction}>
+                              <AvatarFallback>
+                                <ShuffleIcon className="w-9 h-6" />
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="space-y-1">
+                              <h1>{item.purpose}</h1>
+                              <p className={`text-green-600`}>{item.transactionType}</p>
+                              <p className="text-sm text-gray-500">{item.transactionDate.split("T")[0]}</p>
+                            </div>
+                          </div>
+                          <div>
+                            <p className={`text-green-600`}>{item.amount} INR</p>
+                          </div>
+                        </Card>
+                      </div>
+                    ))
+                ) : (
+                  <p className="text-gray-500">No transactions found</p>
+                )}
+              </>
+            ) : (
+              <p className="text-gray-500 text-center">No transactions or orders found</p>
+            )}
+          </div> */}
+          <div className="space-y-5">
+            {(order.orders?.length > 0 || wallet.transactions?.length > 0) ? (
+              [...(order.orders || []), ...(wallet.transactions || [])]
+                .sort((a, b) => new Date(b.timestamp || b.transactionDate) - new Date(a.timestamp || a.transactionDate)) // Sort by latest date
+                .map((item, index) => (
+                  <div key={index}>
+                    <Card className="px-5 flex justify-between items-center p-2">
+                      <div className="flex items-center gap-5">
+                        <Avatar>
+                          <AvatarFallback>
+                            <ShuffleIcon className="w-9 h-6" />
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="space-y-1">
+                          <h1>{item.orderType || item.purpose}</h1>
+                          <p className={`text-blue-600`}>{item.status || item.transactionType}</p>
+                          <p className="text-sm text-gray-500">
+                            {item.timestamp?.split("T")[0] || item.transactionDate?.split("T")[0]}
+                          </p>
+                        </div>
+                      </div>
+                      <div>
+                        <p className={`text-blue-600`}>{item.price || item.amount} INR</p>
+                      </div>
+                    </Card>
+                  </div>
+                ))
+            ) : (
+              <p className="text-gray-500 text-center">No transactions or orders found</p>
+            )}
           </div>
+
+
+
         </div>
       </div>
     </div>

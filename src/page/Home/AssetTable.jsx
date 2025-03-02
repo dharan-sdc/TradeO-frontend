@@ -10,8 +10,8 @@ const AssetTable = ({ coin, category }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   return (
-    <Table>
-      <ScrollArea className={`${category == "all" ? "h-[78vh]" : "h-[78vh]"}`}>
+    <Table className="pl-6">
+      <ScrollArea className={`${category == "all" ? "h-[74vh]" : "h-[78vh]"}`}>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[250px]">Coin</TableHead>

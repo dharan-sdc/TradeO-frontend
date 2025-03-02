@@ -34,7 +34,7 @@ export const login = (UserData) => async (dispatch) => {
 
     dispatch({ type: LOGIN_SUCCESS, payload: user.jwt })
     localStorage.setItem("jwt", user.jwt);
-    UserData.navigate("/home")
+    UserData.navigate("/")
   } catch (error) {
     let errorMsg = "An error occurred"; // Default error message
 

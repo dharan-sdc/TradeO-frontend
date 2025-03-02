@@ -8,92 +8,130 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
+import "../../index.css"; // If index.css is in the root directory
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import AssetTable from './AssetTable'
 import StackChart from './StackChart'
-import { Avatar } from '@radix-ui/react-avatar'
-import { AvatarImage } from '@/components/ui/avatar'
-import { Cross1Icon, DotIcon } from '@radix-ui/react-icons'
-import { Gauge, Lightbulb, MessageCircle } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { getCoinList, getTop50CoinList } from '@/State/Coin/Action'
 import { useDispatch, useSelector } from 'react-redux'
-
-
+import { getCoinList, getTop50CoinList } from '@/State/Coin/Action'
+import { Avatar, AvatarImage } from '@radix-ui/react-avatar'
+import { DotIcon } from 'lucide-react'
+import { motion } from "framer-motion";
 
 const Home = () => {
-  const [category, setCategory] = React.useState("all");
-  const [inputValue, setInputValue] = React.useState("");
-  const [isBotRealease, setIsBotRealease] = React.useState(false)
-  const { coin } = useSelector(store => store)
-  const dispatch = useDispatch()
+  const [category, setCategory] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const coinsPerPage = 20; // Show 20 coins per page
 
+  const dispatch = useDispatch();
+  const { coin } = useSelector(store => store);
 
-  const handleBotRealease = () => setIsBotRealease(!isBotRealease);
-  const handleCategory = (value) => {
-    setCategory(value);
-  }
+  useEffect(() => {
+    dispatch(getTop50CoinList());
+  }, [category]);
 
-  const handleChange = (e) => {
-    setInputValue(e.target.value);
-  }
+  useEffect(() => {
+    dispatch(getCoinList(2));
+  }, []);
 
-  const handleKeyPress = (event) => {
-    if (event.key == 'Enter') {
-      console.log(inputValue)
+  // Determine which data to display
+  const coinList = category === "all" ? coin.coinList : coin.top50;
+  const totalPages = Math.ceil(coinList.length / coinsPerPage);
+
+  // Get paginated data
+  const indexOfLastCoin = currentPage * coinsPerPage;
+  const indexOfFirstCoin = indexOfLastCoin - coinsPerPage;
+  const currentCoins = coinList.slice(indexOfFirstCoin, indexOfLastCoin);
+
+  // Handle page change
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
     }
-    setInputValue("")
-  }
-
-  useEffect(() => {
-    dispatch(getTop50CoinList())
-  }, [category])
-
-  useEffect(() => {
-    dispatch(getCoinList(2))
-  }, [])
+  };
 
   return (
     <div className='relative'>
       <div className='lg:flex'>
-        <div className='lg:w-[50%] lg:border-r ml-2 pr-1'>
+        <div className='lg:w-[50%] lg:border-r ml-2 pr-2'>
 
+          {/* Category Buttons */}
           <div className='p-3 flex items-center gap-4'>
-            <Button onClick={() => handleCategory("all")} variant={category == "all" ? "default" : "outline"} className="rounded-full">All</Button>
-
-            <Button onClick={() => handleCategory("top50")} variant={category == "top50" ? "default" : "outline"} className="rounded-full">Top 10</Button>
-
-            {/* <Button onClick={() => handleCategory("topGainers")} variant={category == "topGainers" ? "default" : "outline"} className="rounded-full">Top Profitable</Button>
-
-            <Button onClick={() => handleCategory("topLosers")} variant={category == "topLosers" ? "default" : "outline"} className="rounded-full">Top Lossable</Button> */}
+            <Button
+              onClick={() => setCategory("all")}
+              variant={category === "all" ? "default" : "outline"}
+              className="rounded-full">
+              All
+            </Button>
+            <Button
+              onClick={() => setCategory("top50")}
+              variant={category === "top50" ? "default" : "outline"}
+              className="rounded-full">
+              Top 10
+            </Button>
           </div>
-          <AssetTable coin={category == "all" ? coin.coinList : coin.top50} category={category} />
-          <div>
+
+          {/* Table with Pagination Data */}
+          <AssetTable coin={currentCoins} category={category} />
+
+          {/* Pagination Component */}
+          <div className="mt-4 flex justify-center">
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious href="#" />
+                  <PaginationPrevious
+                    href="#"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  />
                 </PaginationItem>
+
+                {[...Array(totalPages)].map((_, index) => (
+                  <PaginationItem key={index}>
+                    <PaginationLink
+                      href="#"
+                      onClick={() => handlePageChange(index + 1)}
+                      className={currentPage === index + 1 ? "font-bold" : ""}
+                    >
+                      {index + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+
                 <PaginationItem>
-                  <PaginationLink href="#">1</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext href="#" />
+                  <PaginationNext
+                    href="#"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  />
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
-
           </div>
 
         </div>
 
-        <div className='hidden lg:block lg:w-[50%] p-5'>
-          <StackChart coinId={"ethereum"} />
+        {/* Chart Section */}
+        <div className='hidden lg:block lg:w-[50%] p-5 '>
+          <div className='pb-5'>
 
+
+            <Button className="relative w-full overflow-hidden">
+              <motion.span
+                initial={{ x: "100%" }}
+                animate={{ x: "-100%" }}
+                transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
+                className="absolute whitespace-nowrap"
+              >
+                TradeO Coin © 2025 SDC Group. All rights reserved
+              </motion.span>
+            </Button>
+
+
+
+          </div>
+          <StackChart coinId={"ethereum"} />
           <div className="flex gap-5 items-center">
             <div>
               <Avatar>
@@ -115,69 +153,12 @@ const Home = () => {
               </div>
             </div>
           </div>
-
-
         </div>
+
       </div>
-      <section className='absolute bottom-5 right-5 z-40 flex flex-col justify-end items-end gap-2'>
 
-
-        {isBotRealease && <div className='rounded-md w[20ren] md:w-[25rem] lg:w-[25rem] h-[70vh] bg-white shadow-lg'>
-          <div className='flex justify-between items-center border-b px-6 h-[12%]'>
-            <p>EDITH Chatbot</p>
-            <Button onClick={handleBotRealease} variant="ghost" size="icon">
-              <Cross1Icon />
-            </Button>
-          </div>
-          <div className='h-[76%] flex flex-col overflow-y-auto gap-5 px-5 py-2 scroll-container'>
-            <div className='self-start pb-5 w-auto'>
-              <div className='justify-end self-end px-5 py-2 rounded-md bg-orange-500 w-auto text-cyan-50'>
-                <p>Hey,Test Driver 42</p>
-                <p>Welcome to EDITH chatbot</p>
-                <p>You can ask crypto related any question</p>
-              </div>
-            </div>
-
-            {
-              [1, 1, 1, 1].map((item, i) => (
-                <div key={i} className={`${i % 2 == 0 ? "self-start" : "self-end"} "pb-5 w-auto" `}>
-
-                  {i % 2 == 0 ? <div className='justify-end self-end px-5 py-2 rounded-md bg-orange-500 w-auto text-cyan-50'>
-                    <p>prompt : Who are You ?</p>
-                  </div> : <div className='justify-end self-end px-5 py-2 rounded-md bg-orange-500 w-auto text-cyan-50'>
-                    <p>resonpse : hey,I,m User112</p>
-
-                  </div>}
-
-                </div>
-              ))}
-
-          </div>
-
-          <div className='h-[12%] border-t'>
-            <Input
-              className='w-full h-full order-none outline-none'
-              placeholder='Ask Queries .. '
-              onChange={handleChange}
-              value={inputValue}
-              onKeyboardPress={handleKeyPress}
-            />
-          </div>
-        </div>}
-
-        <div className='relative w-[10rem] cursor-pointer group '>
-          <Button
-            onClick={handleBotRealease}
-            className="w-full h-[3rem] gap-2 items-center">
-            <MessageCircle className='-rotate-90' />
-            <span className='text-2xl'>E D I T H</span>
-          </Button>
-
-        </div>
-
-      </section>
     </div>
   )
 }
 
-export default Home
+export default Home;

@@ -31,15 +31,14 @@ function App() {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer position="top-right" autoClose={3000} />
 
       {auth.user ? (
         <div>
           <Navbar />
           <Routes>
-
-            <Route path='/' element={<Auth />} />
-            <Route path='/home' element={<Home />} />
+            {/* <Route path='/' element={<Auth />} /> */}
+            <Route path='/' element={<Home />} />
             <Route path='/portfolio' element={<Portfolio />} />
             <Route path='/activity' element={<Activity />} />
             <Route path='/wallet' element={<Wallet />} />

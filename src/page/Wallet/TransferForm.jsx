@@ -1,70 +1,128 @@
-import { Button } from '@/components/ui/button'
-import { DialogClose } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { store } from '@/State/Store'
-import { transferMoney } from '@/State/Wallet/Action'
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { Button } from '@/components/ui/button';
+import { DialogClose } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { store } from '@/State/Store';
+import { transferMoney } from '@/State/Wallet/Action';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const TransferForm = () => {
   const dispatch = useDispatch();
-  const { wallet } = useSelector(store => store)
-  const [formData, setFormData] = React.useState({
+  const { wallet } = useSelector(store => store); // Fetch wallet details
+  const [formData, setFormData] = useState({
     amount: '',
     walletId: '',
     purpose: '',
-  })
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+  });
+  const [errors, setErrors] = useState({});
 
-  const handleSubmit = () => {
-    dispatch(transferMoney({
-      jwt: localStorage.getItem('jwt'),
-      walletId: formData.walletId,
-      reqData: {
-        amount: formData.amount,
-        purpose: formData.purpose,
-      }
-    }))
-    console.log("Money sented to :  ", formData);
-  }
+  // Handle input change & validate live
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    validateForm({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Validate fields
+  const validateForm = (data) => {
+    let newErrors = {};
+
+    console.log(wallet?.userWallet?.balance)
+    if (wallet?.userWallet?.balance < formData.amount) {
+      newErrors.amount = 'Insufficient balance!';
+    }
+
+    if (!data.walletId) {
+      newErrors.walletId = 'Wallet Passcode is required!';
+    }
+
+    if (!data.purpose) {
+      newErrors.purpose = 'Purpose is required!';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+
+
+
+  // Handle form submission
+  const handleSubmit = async () => {
+    if (!validateForm(formData)) {
+      toast.error('Please fix the errors and try again.');
+      return;
+    }
+
+    try {
+      dispatch(
+        transferMoney({
+          jwt: localStorage.getItem('jwt'),
+          walletId: formData.walletId,
+          reqData: {
+            amount: formData.amount,
+            purpose: formData.purpose,
+          },
+        })
+      );
+      toast.success(`Transaction successful! Sent ₹${formData.amount} to ${formData.walletId}`);
+      setFormData({ amount: '', walletId: '', purpose: '' }); // Reset form
+      setErrors({});
+    } catch (error) {
+      toast.error('Transaction failed! Please try again.');
+    }
+  };
+
   return (
     <div className='pt-10 space-y-5'>
+      {/* Amount Input */}
       <div>
         <h1 className='pb-1'>Enter Amount</h1>
         <Input
           name="amount"
           onChange={handleChange}
           value={formData.amount}
-          className="py-7" placeholder="$99999" />
+          className="py-7"
+          placeholder="₹99999"
+        />
+        {errors.amount && <p className="text-red-500 text-sm">{errors.amount}</p>}
       </div>
 
+      {/* Wallet Passcode Input */}
       <div>
         <h1 className='pb-1'>Wallet Passcode</h1>
         <Input
           name="walletId"
           onChange={handleChange}
           value={formData.walletId}
-          className="py-7" placeholder="#SDC21F" />
+          className="py-7"
+          placeholder="#SDC21F"
+        />
+        {errors.walletId && <p className="text-red-500 text-sm">{errors.walletId}</p>}
       </div>
 
+      {/* Purpose Input */}
       <div>
         <h1 className='pb-1'>Message</h1>
         <Input
           name="purpose"
           onChange={handleChange}
           value={formData.purpose}
-          className="py-7" placeholder="Make it Memorial Value" />
+          className="py-7"
+          placeholder="Make it memorable"
+        />
+        {errors.purpose && <p className="text-red-500 text-sm">{errors.purpose}</p>}
       </div>
+
+      {/* Submit Button */}
       <DialogClose className='w-full'>
-        <Button onClick={handleSubmit} className="w-full py-7">
-          Sent
+        <Button onClick={handleSubmit} className="w-full py-7" disabled={Object.keys(errors).length > 0}>
+          Send
         </Button>
       </DialogClose>
-
     </div>
-  )
-}
+  );
+};
 
-export default TransferForm
+export default TransferForm;

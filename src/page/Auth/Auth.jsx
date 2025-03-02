@@ -15,6 +15,8 @@ const Auth = () => {
 
         <div className='bgBlur absolute top-1/2 right-40 transform -translate-y-1/2 flex flex-col justify-center items-center h-[35rem] w-[30rem] rounded-md z-50 bg-black bg-opacity-50 shadow-2xl shadow-white px-10'>
 
+
+
           <h1 className='text-6xl font-bold pb-9'>
             <span className='font-bold text-blue-600'>TradeO</span>
             <span className='text-orange-400'> Coin</span>
@@ -67,7 +69,15 @@ const Auth = () => {
         </div>
 
       </div>
+      {/* Additional Text Below */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-center">
 
+
+        <footer className="text-center text-white text-sm opacity-75 mt-2">
+          <p>© 2025 SDC Group. All rights reserved.</p>
+          <p>TradeO™ is a trademark of SDC Group.</p>
+        </footer>
+      </div>
     </div>
   )
 }

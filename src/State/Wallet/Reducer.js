@@ -3,7 +3,7 @@ import * as types from "./ActionType"
 
 const initialState = {
   userWallet: { balance: 0 },
-  loadinf: false,
+  loading: false,
   error: null,
   transactions: [],
 };
