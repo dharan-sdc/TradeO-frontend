@@ -1,17 +1,21 @@
 import { AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { getUserWatchlist } from '@/State/Watchlist/Action'
+// import { getUserWatchlist } from '@/State/Watchlist/Action'
 import { Avatar } from '@radix-ui/react-avatar'
 import { BookmarkFilledIcon } from '@radix-ui/react-icons'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 const Watchlist = () => {
-  const { watchlist } = useSelector(store => store)
+  // const { watchlist } = useSelector(store => store)
   const dispatch = useDispatch()
+
   const handleRemoveToWatchlist = (value) => {
-    dispatch(addItemToWatchlist({ coinId: value, jwt: localStorage.getItem("jwt") }))
+    dispatch(addItemToWatchlist({
+      coinId: value,
+      jwt: localStorage.getItem("jwt")
+    }))
     console.log(value)
   }
   useEffect(() => {

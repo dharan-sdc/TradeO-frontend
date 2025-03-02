@@ -1,3 +1,8 @@
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { store } from '@/State/Store'
+import { updateProfile } from "@/State/Auth/Action"
+
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { VerifiedIcon } from 'lucide-react'
@@ -9,26 +14,40 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-
-import React from 'react'
 import { Button } from '@/components/ui/button'
+import { Input } from "@/components/ui/input"
 import AccountVerificationForm from './AccountVerificationForm'
-import { useSelector } from 'react-redux'
-import { store } from '@/State/Store'
 
 const Profile = () => {
-  const { auth } = useSelector(store => store);
+  const dispatch = useDispatch()
+  const { auth } = useSelector(store => store)
 
-  const handleEnableTwoStepVerification = () => {
-    console.log("Two Step Verification")
+  // Local state for profile updates
+  const [profileData, setProfileData] = useState({
+    dateOfBirth: auth.user?.dateOfBirth || "",
+    nationality: auth.user?.nationality || "",
+    address: auth.user?.address || "",
+    city: auth.user?.city || "",
+    postcode: auth.user?.postcode || "",
+  })
+
+  const [isEditing, setIsEditing] = useState(false)
+
+  const handleInputChange = (e) => {
+    setProfileData({ ...profileData, [e.target.name]: e.target.value })
   }
+
+  const handleSaveProfile = () => {
+    dispatch(updateProfile(profileData))
+    setIsEditing(false)
+  }
+
   return (
     <div className='flex flex-col items-center mb-5'>
       <div className='pt-10 w-full lg:w-[60%]'>
         <Card>
           <CardHeader className="pb-9">
             <CardTitle>Your Information</CardTitle>
-
           </CardHeader>
           <CardContent>
             <div className='lg:flex gap-32'>
@@ -43,26 +62,26 @@ const Profile = () => {
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>Date of Birth:</p>
-                  <p className='text-gray-500'>NA</p>
+                  <p className='text-gray-500'>{profileData.dateOfBirth || "Sept 21 , 2003"}</p>
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>Nationality:</p>
-                  <p className='text-gray-500'>NA</p>
+                  <p className='text-gray-500'>{profileData.nationality || "Indian"}</p>
                 </div>
               </div>
-              <br></br>
+              <br />
               <div className='space-y-7'>
                 <div className='flex'>
                   <p className='w-[9rem]'>Address:</p>
-                  <p className='text-gray-500'>NA</p>
+                  <p className='text-gray-500'>{profileData.address || "Tamilnadu"}</p>
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>City:</p>
-                  <p className='text-gray-500'>NA</p>
+                  <p className='text-gray-500'>{profileData.city || "Pondicherry"}</p>
                 </div>
                 <div className='flex'>
-                  <p className='w-[9rem]'>postcode:</p>
-                  <p className='text-gray-500'>NA</p>
+                  <p className='w-[9rem]'>Postcode:</p>
+                  <p className='text-gray-500'>{profileData.postcode || "13072003"}</p>
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>Country:</p>
@@ -70,48 +89,62 @@ const Profile = () => {
                 </div>
               </div>
             </div>
+            <div className="mt-5 text-center">
+              <Dialog>
+                <DialogTrigger>
+                  <Button>Edit Profile</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Edit Your Details</DialogTitle>
+                    <DialogDescription>Update your personal information.</DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <Input name="dateOfBirth" value={profileData.dateOfBirth} onChange={handleInputChange} placeholder="Date of Birth" />
+                    <Input name="nationality" value={profileData.nationality} onChange={handleInputChange} placeholder="Nationality" />
+                    <Input name="address" value={profileData.address} onChange={handleInputChange} placeholder="Address" />
+                    <Input name="city" value={profileData.city} onChange={handleInputChange} placeholder="City" />
+                    <Input name="postcode" value={profileData.postcode} onChange={handleInputChange} placeholder="Postcode" />
+                    <Button onClick={handleSaveProfile}>Save Changes</Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </CardContent>
         </Card>
+
+        {/* 2-Step Verification */}
         <div className='mt-6'>
           <Card className="w-full">
             <CardHeader className="pb-7">
               <div className='flex items-center gap-3'>
                 <CardTitle>2 Step Verification</CardTitle>
-
-                {true ? <Badge className={"space-x-2 text-white bg-green-700"}>
-                  <span>
-                    Enabled
-                  </span>
-                  <VerifiedIcon /></Badge> : <Badge className="bg-purple-800 p-1.5">
-                  Disalbed
-                </Badge>}
+                {true ? (
+                  <Badge className="space-x-2 text-white bg-green-700">
+                    <span>Enabled</span>
+                    <VerifiedIcon />
+                  </Badge>
+                ) : (
+                  <Badge className="bg-purple-800 p-1.5">Disabled</Badge>
+                )}
               </div>
             </CardHeader>
             <CardContent>
-              <div>
-                <Dialog>
-                  <DialogTrigger>
-                    <Button>
-                      Enabled Two Set Verification
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Verify your Account</DialogTitle>
-
-                    </DialogHeader>
-                    <AccountVerificationForm handleSubmit={handleEnableTwoStepVerification} />
-                  </DialogContent>
-                </Dialog>
-
-              </div>
+              <Dialog>
+                <DialogTrigger>
+                  <Button>Enable Two-Step Verification</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Verify your Account</DialogTitle>
+                  </DialogHeader>
+                  <AccountVerificationForm handleSubmit={() => console.log("Two-Step Verification Enabled")} />
+                </DialogContent>
+              </Dialog>
             </CardContent>
-
           </Card>
-
         </div>
       </div>
-
     </div>
   )
 }

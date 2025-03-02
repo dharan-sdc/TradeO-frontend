@@ -15,10 +15,11 @@ import TreadingForm from './TreadingForm'
 import StackChart from '../Home/StackChart'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { fetchCoinDetails } from '@/State/Coin/Action'
+
 import { store } from '@/State/Store'
-import { addItemToWatchlist } from '@/State/Watchlist/Action'
-import { exitInWatchlist } from '@/Utilis/existInWatchlist'
+import { addItemToWatchlist, getUserWatchlist } from '@/State/Watchlist/Action'
+import { existInWatchlist } from '@/Utilis/existInWatchlist'
+import { fetchCoinDetails } from '@/State/Coin/Action'
 
 
 
@@ -26,32 +27,35 @@ import { exitInWatchlist } from '@/Utilis/existInWatchlist'
 
 const StockDetails = () => {
 
-  const { coin } = useSelector(store => store.coin)
-  const { watchlist } = useSelector(store => store)
+  const coin = useSelector(store => store.coin)
+  const watchlist = useSelector(store => store.watchlist)
 
   const dispatch = useDispatch()
   const { id } = useParams()
 
   useEffect(() => {
-    dispatch(fetchCoinDetails({ coinId: id, jwt: localStorage.getItem("jwt") }));
-    dispatch(getUserWatchlist(localStorage.getItem("jwt")))
-  }, [id, dispatch]); // Added dispatch as a dependency
 
-  const dummyCoinData = {
-    image: { large: "https://th.bing.com/th?id=ODL.edfcf373d17146688b2c295935da724d&w=100&h=100&c=12&pcl=faf9f7&o=6&dpr=1.3&pid=AlgoBlockDebug" },  // Use a local default image
-    symbol: "BTC",
-    name: "Bitcoin",
-    market_data: {
-      current_price: { inr: 9999 },
-      market_cap_change_24h: 9999,
-      market_cap_change_percentage_24h: 0.0987,
-    },
-  };
-  const coinData = coin?.coinDetails || dummyCoinData;
+    dispatch(fetchCoinDetails({
+      coinId: id,
+      jwt: localStorage.getItem("jwt")
+    }));
+    dispatch(getUserWatchlist(
+      localStorage.getItem("jwt")))
+
+    console.log("Dispatched fetchCoinDetails for ID:", id);
+
+  }, [id, dispatch]);
+
 
   const handleAddToWatchlist = () => {
     dispatch(addItemToWatchlist({ coinId: coin.coinDetails?.id, jwt: localStorage.getItem("jwt") }))
   }
+
+  console.log("Redux Store - Coin State:", coin);
+  const fullState = useSelector((store) => store);
+  console.log("Full Redux Store:", fullState);
+
+  console.log("CoinDeatils->", coin?.coinDetails)
 
   return (
     <div className='p-5 mt-5'>
@@ -60,22 +64,22 @@ const StockDetails = () => {
 
           <div>
             <Avatar>
-              <AvatarImage src={coinData?.image.large} />
+              <AvatarImage src={coin?.coinDetails?.image.large} />
 
             </Avatar>
           </div>
           <div>
             <div className='flex items-center gap-2'>
-              <p>{coinData?.symbol.toUpperCase()}</p>
+              <p>{coin?.coinDetails?.symbol.toUpperCase()}</p>
               <DotIcon className='text-gray-400' />
-              <p className='text-gray-400'>{coinData?.name}</p>
+              <p className='text-gray-400'>{coin?.coinDetails?.name}</p>
 
             </div>
             <div className='flex items-end gap-2'>
-              <p className='text-xl font-bold'>${coinData?.market_data.current_price.inr}</p>
+              <p className='text-xl font-bold'>${coin?.coinDetails?.market_data.current_price.inr}</p>
               <p className='text-red-600'>
-                <span>-{coinData?.market_data.market_cap_change_24h}</span>
-                <span>(-{coinData?.market_data.market_cap_change_percentage_24h}%)</span>
+                <span>-{coin?.coinDetails?.market_data.market_cap_change_24h}</span>
+                <span>(-{coin?.coinDetails?.market_data.market_cap_change_percentage_24h}%)</span>
               </p>
 
             </div>
@@ -86,7 +90,7 @@ const StockDetails = () => {
         <div className='flex items-center gap-4'>
           <Button onClick={handleAddToWatchlist}>
 
-            {exitInWatchlist(watchlist?.item, coin?.coinDetails) ?
+            {existInWatchlist(watchlist?.item, coin?.coinDetails) ?
               (<BookmarkFilledIcon className='h-6 w-6' />)
               : (<BookmarkIcon className='h-6 w-6' />)
             }

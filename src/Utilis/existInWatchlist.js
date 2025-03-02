@@ -1,6 +1,8 @@
-export const exitInWatchlist = (items, coin) => {
-  for (let item of items) {
-    if (item?.id === coin?.id) return true;
+export const existInWatchlist = (items, stock) => {
+  if (!Array.isArray(items)) {
+    console.error("Error: items is not an array", items); // Debugging
+    return false; // Return a default value
   }
-  return false;
-}
+
+  return items.some((item) => item.id === stock.id);
+};

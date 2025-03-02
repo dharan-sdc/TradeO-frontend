@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 
 
 const menu = [
-  { name: "Home", path: "/", icon: <HomeIcon className='h-6 w-6' /> },
+  { name: "Home", path: "/home", icon: <HomeIcon className='h-6 w-6' /> },
   {
     name: "Portfolio",
     path: "/portfolio",

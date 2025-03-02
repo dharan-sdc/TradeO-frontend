@@ -26,9 +26,9 @@ const Home = () => {
   const [category, setCategory] = React.useState("all");
   const [inputValue, setInputValue] = React.useState("");
   const [isBotRealease, setIsBotRealease] = React.useState(false)
-
-  const dispatch = useDispatch()
   const { coin } = useSelector(store => store)
+  const dispatch = useDispatch()
+
 
   const handleBotRealease = () => setIsBotRealease(!isBotRealease);
   const handleCategory = (value) => {
@@ -51,22 +51,22 @@ const Home = () => {
   }, [category])
 
   useEffect(() => {
-    dispatch(getCoinList(1))
+    dispatch(getCoinList(2))
   }, [])
 
   return (
     <div className='relative'>
       <div className='lg:flex'>
-        <div className='lg:w-[50%] lg:border-r'>
+        <div className='lg:w-[50%] lg:border-r ml-2 pr-1'>
 
           <div className='p-3 flex items-center gap-4'>
             <Button onClick={() => handleCategory("all")} variant={category == "all" ? "default" : "outline"} className="rounded-full">All</Button>
 
-            <Button onClick={() => handleCategory("top50")} variant={category == "top50" ? "default" : "outline"} className="rounded-full">Top 50</Button>
+            <Button onClick={() => handleCategory("top50")} variant={category == "top50" ? "default" : "outline"} className="rounded-full">Top 10</Button>
 
-            <Button onClick={() => handleCategory("topGainers")} variant={category == "topGainers" ? "default" : "outline"} className="rounded-full">Top Profitable</Button>
+            {/* <Button onClick={() => handleCategory("topGainers")} variant={category == "topGainers" ? "default" : "outline"} className="rounded-full">Top Profitable</Button>
 
-            <Button onClick={() => handleCategory("topLosers")} variant={category == "topLosers" ? "default" : "outline"} className="rounded-full">Top Lossable</Button>
+            <Button onClick={() => handleCategory("topLosers")} variant={category == "topLosers" ? "default" : "outline"} className="rounded-full">Top Lossable</Button> */}
           </div>
           <AssetTable coin={category == "all" ? coin.coinList : coin.top50} category={category} />
           <div>
@@ -90,8 +90,9 @@ const Home = () => {
           </div>
 
         </div>
+
         <div className='hidden lg:block lg:w-[50%] p-5'>
-          <StackChart coinId={"bitcoin"} />
+          <StackChart coinId={"ethereum"} />
 
           <div className="flex gap-5 items-center">
             <div>

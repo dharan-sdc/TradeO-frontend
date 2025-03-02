@@ -18,6 +18,7 @@ export const getUserWallet = (jwt) => async (dispatch) => {
     });
 
     console.log("UserWallet : ", response.data)
+
   } catch (error) {
     console.log("Wallet getUserWallet : ", error);
     dispatch({

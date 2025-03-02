@@ -48,12 +48,7 @@ const coinReducer = (state = initialState, action) => {
         marketChart: { loading: true, data: [] },
         error: null,
       };
-    case FETCH_MARKET_CHART_REQUEST:
-      return {
-        ...state,
-        marketChart: { loading: true, data: [] },
-        error: null,
-      };
+
     case FETCH_COIN_LIST_SUCCESS:
       return {
         ...state,
@@ -87,6 +82,13 @@ const coinReducer = (state = initialState, action) => {
       return {
         ...state,
         searchCoinList: action.payload,
+        loading: false,
+        error: null,
+      };
+    case FETCH_COIN_DETAILS_SUCCESS:
+      return {
+        ...state,
+        coinDetails: action.payload,
         loading: false,
         error: null,
       };

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_USER_REQUEST, GET_USER_SUCCESS, GET_USER_FAILURE, LOGIN_REQUEST, REGISTER_FAILURE, REGISTER_REQUEST, REGISTER_SUCCESS, LOGIN_FAILURE, LOGIN_SUCCESS, LOGOUT } from "./ActionTypes";
+import { GET_USER_REQUEST, GET_USER_SUCCESS, GET_USER_FAILURE, LOGIN_REQUEST, REGISTER_FAILURE, REGISTER_REQUEST, REGISTER_SUCCESS, LOGIN_FAILURE, LOGIN_SUCCESS, LOGOUT, UPDATE_PROFILE } from "./ActionTypes";
 
 export const register = (UserData) => async (dispatch) => {
 
@@ -34,7 +34,7 @@ export const login = (UserData) => async (dispatch) => {
 
     dispatch({ type: LOGIN_SUCCESS, payload: user.jwt })
     localStorage.setItem("jwt", user.jwt);
-    UserData.navigate("/")
+    UserData.navigate("/home")
   } catch (error) {
     let errorMsg = "An error occurred"; // Default error message
 
@@ -75,8 +75,12 @@ export const getUser = (jwt) => async (dispatch) => {
     console.log(e);
   }
 }
-
+export const updateProfile = (profileData) => ({
+  type: UPDATE_PROFILE,
+  payload: profileData
+})
 export const logout = () => (dispatch) => {
-  localStorage.clear();
-  dispatch({ type: LOGOUT });
-}
+  console.log("Logging out..."); // Debugging step
+  localStorage.clear(); // Clear user session data
+  dispatch({ type: LOGOUT }); // Dispatch logout action
+};

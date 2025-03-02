@@ -43,10 +43,9 @@ export const getTop50CoinList = () => async (dispatch) => {
 
 
   try {
-    const response = await api.get(`/coins/top-50`);
+    const response = await api.get(`/coins/top-2`);
 
     dispatch({ type: FETCH_TOP_50_COIN_SUCCESS, payload: response.data });
-    console.log("Top 50 Coins response:", response.data);
   } catch (error) {
     console.error("Error fetching top 50 coins:", error);
     dispatch({ type: FETCH_TOP_50_COIN_FAILURE, payload: error.message });
@@ -68,7 +67,7 @@ export const fetchMarketChart = ({ coinId, days, jwt }) => async (dispatch) => {
     dispatch({ type: FETCH_MARKET_CHART_SUCCESS, payload: response.data });
   } catch (error) {
     console.error(`Error fetching market chart for ${coinId}:`, error);
-    dispatch({ type: FETCH_MARKET_CHART_FAILURE, payload: error.message || "Something went wrong" });
+    dispatch({ type: FETCH_MARKET_CHART_FAILURE, payload: error.message });
   }
 };
 
@@ -80,7 +79,7 @@ export const fetchCoinById = (coinId) => async (dispatch) => {
   try {
     const response = await api.get(`/coins/${coinId}`);
     dispatch({ type: FETCH_COIN_BY_ID_SUCCESS, payload: response.data });
-    console.log(`Coin by id:`, response.data);
+
   } catch (error) {
     console.log(`Error:`, error);
     dispatch({ type: FETCH_COIN_BY_ID_FAILURE, payload: error.messag });
@@ -101,7 +100,7 @@ export const fetchCoinDetails = ({ coinId, jwt }) => async (dispatch) => {
 
 
     dispatch({ type: FETCH_COIN_DETAILS_SUCCESS, payload: response.data });
-    console.log("Coin Detail:", response.data);
+    console.log("Coin Detail by fetch -- :", response.data);
 
   } catch (error) {
     console.error("error", error);
@@ -122,7 +121,7 @@ export const searchCoin = (keyword) => async (dispatch) => {
     const response = await api.get(`/coins/search?q=${keyword}`);
 
     dispatch({ type: SEARCH_COIN_SUCCESS, payload: response.data });
-    console.log(response.data);
+    console.log("Search coin : -- ", response.data);
   } catch (error) {
     console.log(response.error)
     dispatch({ type: SEARCH_COIN_FAILURE, payload: error.message });

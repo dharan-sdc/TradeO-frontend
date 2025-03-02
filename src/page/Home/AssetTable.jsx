@@ -11,7 +11,7 @@ const AssetTable = ({ coin, category }) => {
   const navigate = useNavigate()
   return (
     <Table>
-      <ScrollArea className={`${category == "all" ? "h-[78vh]" : "h-[82vh]"}`}>
+      <ScrollArea className={`${category == "all" ? "h-[78vh]" : "h-[78vh]"}`}>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[250px]">Coin</TableHead>

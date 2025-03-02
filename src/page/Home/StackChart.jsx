@@ -24,6 +24,12 @@ const timeSeries = [
     lable: "1 Month",
     value: 30,
   },
+  {
+    keyword: "DIGITAL_CURRENCY_YEARLY",
+    key: "Yearly Time Series",
+    lable: "1 Year",
+    value: 364,
+  },
 ];
 
 const StackChart = ({ coinId }) => {
