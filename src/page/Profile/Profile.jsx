@@ -21,6 +21,11 @@ import AccountVerificationForm from './AccountVerificationForm'
 const Profile = () => {
   const dispatch = useDispatch()
   const { auth } = useSelector(store => store)
+  const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false); // Track status
+
+  const handleVerificationSuccess = () => {
+    setIsTwoFactorEnabled(true); // Update status on successful OTP verification
+  };
 
   // Local state for profile updates
   const [profileData, setProfileData] = useState({
@@ -39,7 +44,7 @@ const Profile = () => {
 
   const handleSaveProfile = () => {
     dispatch(updateProfile(profileData))
-    setIsEditing(false)
+    setIsTwoFactorEnabled(true);
   }
 
   return (
@@ -114,12 +119,12 @@ const Profile = () => {
         </Card>
 
         {/* 2-Step Verification */}
-        <div className='mt-6'>
+        <div className="mt-6">
           <Card className="w-full">
             <CardHeader className="pb-7">
-              <div className='flex items-center gap-3'>
-                <CardTitle>2 Step Verification</CardTitle>
-                {true ? (
+              <div className="flex items-center gap-3">
+                <CardTitle>2-Step Verification</CardTitle>
+                {isTwoFactorEnabled ? (
                   <Badge className="space-x-2 text-white bg-green-700">
                     <span>Enabled</span>
                     <VerifiedIcon />
@@ -131,14 +136,15 @@ const Profile = () => {
             </CardHeader>
             <CardContent>
               <Dialog>
-                <DialogTrigger>
-                  <Button>Enable Two-Step Verification</Button>
+                <DialogTrigger asChild>
+                  <Button>{isTwoFactorEnabled ? "Renewal your Two-factor" : "Enable Two-Step Verification"}</Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Verify your Account</DialogTitle>
                   </DialogHeader>
-                  <AccountVerificationForm handleSubmit={() => console.log("Two-Step Verification Enabled")} />
+                  <AccountVerificationForm onVerificationSuccess={handleVerificationSuccess} />
+
                 </DialogContent>
               </Dialog>
             </CardContent>

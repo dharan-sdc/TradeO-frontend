@@ -55,11 +55,17 @@ const Auth = () => {
                     </Button>
                   </div>
 
-                  <div className='w-full py-5 '>
+                  <div className='w-full py-5 text-center'>
 
-                    <Button onClick={() => navigate("/forgot-password")} variant="ghost" className=" w-full" >
+                    <p className="text-sm text-gray-400 ">
+                      Secure & Smart Crypto Trading Platform. Trade with confidence.
+                    </p>
+                    <p className="text-sm text-gray-500 mt-4 md:mt-0">
+                      © {new Date().getFullYear()} TradeO. All Rights Reserved.
+                    </p>
+                    {/* <Button onClick={() => navigate("/forgot-password")} variant="ghost" className=" w-full" >
                       Forgot Password
-                    </Button>
+                    </Button> */}
                   </div>
 
                 </section>)
@@ -74,7 +80,7 @@ const Auth = () => {
 
 
         <footer className="text-center text-white text-sm opacity-75 mt-2">
-          <p>© 2025 SDC Group. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} SDC Group. All rights reserved.</p>
           <p>TradeO™ is a trademark of SDC Group.</p>
         </footer>
       </div>

@@ -6,7 +6,9 @@ import { Button } from '@/components/ui/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { getWalletTransaction } from '@/State/Wallet/Action';
 import { getAssetDetails } from '@/State/Asset/Action';
-import { payOrder } from '@/State/Order/Action'; // Assuming payOrder is correctly imported
+import { payOrder } from '@/State/Order/Action';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const TreadingForm = () => {
   const [orderType, setOrderType] = useState("BUY");
@@ -35,16 +37,16 @@ const TreadingForm = () => {
     setAmount(amount);
 
     const volume = calculateBuyCost(
-      amount, coin?.coinDetails?.market_data?.current_price?.inr)
+      amount, coin?.coinDetails?.market_data?.current_price?.inr
+    );
     setQuantity(volume);
   };
 
   const calculateBuyCost = (amount, price) => {
     let volume = amount / price;
-    let decimalPlaces = Math.max(2, price.toString().split(".").length)
-
-    return volume.toFixed(decimalPlaces)
-  }
+    let decimalPlaces = Math.max(2, price.toString().split(".").length);
+    return volume.toFixed(decimalPlaces);
+  };
 
   const handleBuyCrypto = () => {
     const jwt = localStorage.getItem("jwt");
@@ -67,7 +69,17 @@ const TreadingForm = () => {
           orderType,
         },
       })
-    );
+    ).then(() => {
+      toast.success(`✅ ${orderType} Order Successful!`, {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }).catch(() => {
+      toast.error(`❌ ${orderType} Order Failed!`, {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    });
   };
 
   return (
@@ -93,9 +105,7 @@ const TreadingForm = () => {
       {/* Crypto Display */}
       <div className="flex gap-5 items-center">
         <Avatar>
-          <AvatarImage
-            src={coin?.coinDetails?.image.large}
-          />
+          <AvatarImage src={coin?.coinDetails?.image.large} />
         </Avatar>
         <div>
           <div className="flex items-center gap-2">
