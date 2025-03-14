@@ -32,7 +32,7 @@ const Home = () => {
   }, [category]);
 
   useEffect(() => {
-    dispatch(getCoinList(2));
+    dispatch(getCoinList(1));
   }, []);
 
   // Determine which data to display

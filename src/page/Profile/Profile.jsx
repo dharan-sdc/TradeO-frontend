@@ -67,7 +67,7 @@ const Profile = () => {
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>Date of Birth:</p>
-                  <p className='text-gray-500'>{profileData.dateOfBirth || "Sept 21 , 2003"}</p>
+                  <p className='text-gray-500'>{profileData.dateOfBirth || "dd : mm : yyyy"}</p>
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>Nationality:</p>
@@ -78,15 +78,15 @@ const Profile = () => {
               <div className='space-y-7'>
                 <div className='flex'>
                   <p className='w-[9rem]'>Address:</p>
-                  <p className='text-gray-500'>{profileData.address || "Tamilnadu"}</p>
+                  <p className='text-gray-500'>{profileData.address || "No: , xxx Street , xxx city"}</p>
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>City:</p>
-                  <p className='text-gray-500'>{profileData.city || "Pondicherry"}</p>
+                  <p className='text-gray-500'>{profileData.city || "xxx city"}</p>
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>Postcode:</p>
-                  <p className='text-gray-500'>{profileData.postcode || "13072003"}</p>
+                  <p className='text-gray-500'>{profileData.postcode || "*** ***"}</p>
                 </div>
                 <div className='flex'>
                   <p className='w-[9rem]'>Country:</p>
