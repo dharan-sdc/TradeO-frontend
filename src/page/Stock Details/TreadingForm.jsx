@@ -70,7 +70,7 @@ const TreadingForm = () => {
         },
       })
     ).then(() => {
-      toast.success(`✅ ${orderType} Order Successful!`, {
+      toast.success(` ${orderType} Order Successful!`, {
         position: "top-right",
         autoClose: 3000,
       });

@@ -44,9 +44,9 @@ const Portfolio = () => {
                     <span className='font-bold font-serif'>{item.coin?.name || "Unknown"}</span>
                     <span className='font-medium font-mono'>{item.coin?.symbol || "--"}</span>
                   </TableCell>
-                  <TableCell>{item.coin?.current_price ?? "--"}</TableCell>
+                  <TableCell>₹{item.coin?.current_price ?? "--"}</TableCell>
                   <TableCell>{item.quantity ?? "--"}</TableCell>
-                  <TableCell>{item.buyPrice ?? "--"}</TableCell>
+                  <TableCell>₹{item.buyPrice ?? "--"}</TableCell>
                   <TableCell>{item.coin?.price_change_24h ?? "--"}</TableCell>
                   <TableCell>{item.coin?.price_change_percentage_24h ? `-${item.coin.price_change_percentage_24h}` : "--"}</TableCell>
                   <TableCell className="text-right">{item.coin?.total_volume ?? "--"}</TableCell>

@@ -16,7 +16,7 @@ import StackChart from './StackChart'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCoinList, getTop50CoinList } from '@/State/Coin/Action'
 import { Avatar, AvatarImage } from '@radix-ui/react-avatar'
-import { DotIcon } from 'lucide-react'
+import { DotIcon, MailIcon } from 'lucide-react'
 import { motion } from "framer-motion";
 
 const Home = () => {
@@ -135,24 +135,37 @@ const Home = () => {
           <div className="flex gap-5 items-center">
             <div>
               <Avatar>
-                <AvatarImage src="https://assets.coingecko.com/coins/images/279/standard/ethereum.png?1696501628" />
+                <AvatarImage src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1696501628" />
               </Avatar>
             </div>
             <div>
               <div className='flex items-center gap-2'>
-                <p>ETH</p>
+                <p>Bitcoin</p>
                 <DotIcon className='text-gray-400' />
-                <p className='text-gray-400'>TradeO</p>
+                <p className='text-gray-400'>btc</p>
               </div>
               <div className='flex items-end gap-2'>
-                <p className='text-xl font-bold'>5464</p>
-                <p className='text-red-500'>
-                  <span>-13192962630.7865</span>
-                  <span>(-0.298986%)</span>
+                <p className='text-xl font-bold'>7359707</p>
+                <p className='text-gray-500'>
+                  <span>3.43854</span>
+                  <span>(211686)</span>
                 </p>
               </div>
+              
             </div>
           </div>
+          
+          <div className="mt-4 p-3 bg-gray-50 rounded-lg shadow-lg flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-gray-800">Need Help? Contact Us</h2>
+
+            <a href="mailto:support@tradeo.com?subject=Support Request&body=Hello, I need help with...">
+              <Button variant="outline" className="flex items-center gap-2">
+                <MailIcon className="w-5 h-5" />
+                Email Support
+              </Button>
+            </a>
+          </div>
+
         </div>
 
       </div>

@@ -33,7 +33,7 @@ const Withdrawal = () => {
                     <p>{item.date?.toString() ?? "--"}</p>
                   </TableCell>
                   <TableCell>{item.method ?? "Bank Account"}</TableCell>
-                  <TableCell>${item.amount ?? "0.00"}</TableCell>
+                  <TableCell>₹{item.amount ?? "0.00"}</TableCell>
                   <TableCell className="text-right">{item.status ?? "Pending"}</TableCell>
                 </TableRow>
               ))}

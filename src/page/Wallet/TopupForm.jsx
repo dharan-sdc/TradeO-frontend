@@ -30,7 +30,7 @@ const TopupForm = () => {
     <div className='pt-10 space-y-5'>
       <div>
         <h1 className='pb-1'>Enter Amount</h1>
-        <Input type='text' onChange={handleChange} className='pb-1 text-lg' placeholder='$9999' value={amount} />
+        <Input type='text' onChange={handleChange} className='pb-1 text-lg' placeholder='₹9999' value={amount} />
       </div>
       <div>
         <h1 className='pb-5'>Select payment method</h1>

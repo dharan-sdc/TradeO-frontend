@@ -23,7 +23,7 @@ const WithdrawalForm = () => {
     <div className='pt-10 space-y-5'>
       <div className='flex justify-between items-center rounded-md bg-gray-400 text-xl font-bold px-5 py-4'>
         <p>Available Balance</p>
-        <p>$ {wallet.userWallet.balance}</p>
+        <p>₹ {wallet.userWallet.balance}</p>
 
       </div>
       <div className='flex flex-col items-center'>
@@ -32,7 +32,7 @@ const WithdrawalForm = () => {
 
           <Input
             onChange={handleChange} value={amount} className="withdrawalInput py-7 border-none outline-none focus:outline-none px-0 text-2xl text-center "
-            placeholder="$49000"
+            placeholder="₹999"
             type="number"
           />
 

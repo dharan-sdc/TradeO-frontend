@@ -75,7 +75,7 @@ const StockDetails = () => {
 
             </div>
             <div className='flex items-end gap-2'>
-              <p className='text-xl font-bold'>${coin?.coinDetails?.market_data.current_price.inr}</p>
+              <p className='text-xl font-bold'>₹{coin?.coinDetails?.market_data.current_price.inr}</p>
               <p className='text-red-600'>
                 <span>-{coin?.coinDetails?.market_data.market_cap_change_24h}</span>
                 <span>(-{coin?.coinDetails?.market_data.market_cap_change_percentage_24h}%)</span>

@@ -46,12 +46,12 @@ const Activity = () => {
                     </Avatar>
                     <span className='font-bold font-serif'>{item.orderItem?.coin?.name ?? "Unknown"}</span>
                   </TableCell>
-                  <TableCell>{item.orderItem?.buyPrice ?? "--"}</TableCell>
-                  <TableCell>{item.orderItem?.sellPrice ?? "--"}</TableCell>
+                  <TableCell>₹{item.orderItem?.buyPrice ?? "--"}</TableCell>
+                  <TableCell>₹{item.orderItem?.sellPrice ?? "--"}</TableCell>
                   <TableCell>{item.orderType ?? "--"}</TableCell>
                   <TableCell>{calculateProfit(item) ?? "--"}</TableCell>
                   <TableCell>{item.orderItem?.quantity ?? "--"}</TableCell>
-                  <TableCell className="text-right">{item.price ?? "--"}</TableCell>
+                  <TableCell className="text-right">₹{item.price ?? "--"}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

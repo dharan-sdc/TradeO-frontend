@@ -51,7 +51,7 @@ const Watchlist = () => {
                   <TableCell>{item.total_volume ?? "--"}</TableCell>
                   <TableCell>{item.market_cap ?? "--"}</TableCell>
                   <TableCell>{item.price_change_percentage_24h ?? "--"}%</TableCell>
-                  <TableCell>${item.current_price ?? "--"}</TableCell>
+                  <TableCell>₹{item.current_price ?? "--"}</TableCell>
                   <TableCell className="text-right">
                     <Button
                       variant="ghost"

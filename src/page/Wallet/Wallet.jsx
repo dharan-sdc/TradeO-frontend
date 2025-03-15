@@ -246,7 +246,7 @@ const Wallet = () => {
                         </div>
                       </div>
                       <div>
-                        <p className={`text-blue-600`}>{item.price || item.amount} INR</p>
+                        <p className={`text-blue-600`}>₹{item.price || item.amount} INR</p>
                       </div>
                     </Card>
                   </div>

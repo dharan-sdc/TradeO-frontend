@@ -38,7 +38,7 @@ const AssetTable = ({ coin, category }) => {
             <TableCell>{item.market_cap}</TableCell>
             <TableCell>{item.price_change_percentage_24h
             }</TableCell>
-            <TableCell className="text-right">${item.current_price}</TableCell>
+            <TableCell className="text-right">₹{item.current_price}</TableCell>
           </TableRow>)}
 
         </TableBody>
