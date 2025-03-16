@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { store } from '@/State/Store'
 import { updateProfile } from "@/State/Auth/Action"
@@ -18,20 +18,30 @@ import { Button } from '@/components/ui/button'
 import { Input } from "@/components/ui/input"
 import AccountVerificationForm from './AccountVerificationForm'
 
+
 const Profile = () => {
   const dispatch = useDispatch()
   const { auth } = useSelector(store => store)
   const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false); // Track status
 
   const handleVerificationSuccess = () => {
-    setIsTwoFactorEnabled(true); // Update status on successful OTP verification
+    localStorage.setItem("isTwoFactorEnabled", "true");
+    setIsTwoFactorEnabled(true);
   };
+
+  useEffect(() => {
+    const storedStatus = localStorage.getItem("isTwoFactorEnabled");
+    if (storedStatus === "true") {
+      setIsTwoFactorEnabled(true);
+    }
+  }, []);
+
 
   // Local state for profile updates
   const [profileData, setProfileData] = useState({
     dateOfBirth: auth.user?.dateOfBirth || "",
     nationality: auth.user?.nationality || "",
-    address: auth.user?.address || "",
+
     city: auth.user?.city || "",
     postcode: auth.user?.postcode || "",
   })
@@ -76,10 +86,7 @@ const Profile = () => {
               </div>
               <br />
               <div className='space-y-7'>
-                <div className='flex'>
-                  <p className='w-[9rem]'>Address:</p>
-                  <p className='text-gray-500'>{profileData.address || "No: , xxx Street , xxx city"}</p>
-                </div>
+
                 <div className='flex'>
                   <p className='w-[9rem]'>City:</p>
                   <p className='text-gray-500'>{profileData.city || "xxx city"}</p>
@@ -107,7 +114,7 @@ const Profile = () => {
                   <div className="space-y-4">
                     <Input name="dateOfBirth" value={profileData.dateOfBirth} onChange={handleInputChange} placeholder="Date of Birth" />
                     <Input name="nationality" value={profileData.nationality} onChange={handleInputChange} placeholder="Nationality" />
-                    <Input name="address" value={profileData.address} onChange={handleInputChange} placeholder="Address" />
+
                     <Input name="city" value={profileData.city} onChange={handleInputChange} placeholder="City" />
                     <Input name="postcode" value={profileData.postcode} onChange={handleInputChange} placeholder="Postcode" />
                     <Button onClick={handleSaveProfile}>Save Changes</Button>
@@ -123,7 +130,9 @@ const Profile = () => {
           <Card className="w-full">
             <CardHeader className="pb-7">
               <div className="flex items-center gap-3">
+
                 <CardTitle>2-Step Verification</CardTitle>
+
                 {isTwoFactorEnabled ? (
                   <Badge className="space-x-2 text-white bg-green-700">
                     <span>Enabled</span>
@@ -132,6 +141,7 @@ const Profile = () => {
                 ) : (
                   <Badge className="bg-purple-800 p-1.5">Disabled</Badge>
                 )}
+
               </div>
             </CardHeader>
             <CardContent>
@@ -150,6 +160,7 @@ const Profile = () => {
             </CardContent>
           </Card>
         </div>
+
       </div>
     </div>
   )
