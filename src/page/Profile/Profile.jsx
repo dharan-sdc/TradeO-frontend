@@ -21,6 +21,7 @@ import { UploadIcon } from '@radix-ui/react-icons'
 import TopupForm from '../Wallet/TopupForm'
 
 
+
 const Profile = () => {
   const dispatch = useDispatch()
   const { auth } = useSelector(store => store)
@@ -60,6 +61,8 @@ const Profile = () => {
     dispatch(updateProfile(profileData))
     setIsTwoFactorEnabled(true);
   }
+
+
 
   return (
     <div className='flex flex-col items-center mb-5'>

@@ -3,7 +3,7 @@ import { DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { store } from '@/State/Store';
 import { transferMoney } from '@/State/Wallet/Action';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,18 +18,23 @@ const TransferForm = () => {
   });
   const [errors, setErrors] = useState({});
 
-  // Handle input change & validate live
+  // Handle input change
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    validateForm({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, [name]: value };
+      validateForm(updatedData); // Validate after each change
+      return updatedData;
+    });
   };
 
   // Validate fields
   const validateForm = (data) => {
     let newErrors = {};
 
-    console.log(wallet?.userWallet?.balance)
-    if (wallet?.userWallet?.balance < formData.amount) {
+    if (!data.amount || isNaN(data.amount) || Number(data.amount) <= 0) {
+      newErrors.amount = 'Please enter a valid amount greater than 0';
+    } else if (wallet?.userWallet?.balance < Number(data.amount)) {
       newErrors.amount = 'Insufficient balance!';
     }
 
@@ -45,9 +50,6 @@ const TransferForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-
-
-
   // Handle form submission
   const handleSubmit = async () => {
     if (!validateForm(formData)) {
@@ -56,7 +58,7 @@ const TransferForm = () => {
     }
 
     try {
-      dispatch(
+      await dispatch(
         transferMoney({
           jwt: localStorage.getItem('jwt'),
           walletId: formData.walletId,
@@ -67,7 +69,7 @@ const TransferForm = () => {
         })
       );
       toast.success(`Transaction successful! Sent ₹${formData.amount} to ${formData.walletId}`);
-      setFormData({ amount: '', walletId: '', purpose: '' }); // Reset form
+      setFormData({ amount: '', walletId: '', purpose: '' }); // Reset form on success
       setErrors({});
     } catch (error) {
       toast.error('Transaction failed! Please try again.');
@@ -75,10 +77,10 @@ const TransferForm = () => {
   };
 
   return (
-    <div className='pt-10 space-y-5'>
+    <div className="pt-10 space-y-5">
       {/* Amount Input */}
       <div>
-        <h1 className='pb-1'>Enter Amount</h1>
+        <h1 className="pb-1">Enter Amount</h1>
         <Input
           name="amount"
           onChange={handleChange}
@@ -91,7 +93,7 @@ const TransferForm = () => {
 
       {/* Wallet Passcode Input */}
       <div>
-        <h1 className='pb-1'>Wallet Passcode</h1>
+        <h1 className="pb-1">Wallet Passcode</h1>
         <Input
           name="walletId"
           onChange={handleChange}
@@ -104,7 +106,7 @@ const TransferForm = () => {
 
       {/* Purpose Input */}
       <div>
-        <h1 className='pb-1'>Message</h1>
+        <h1 className="pb-1">Message</h1>
         <Input
           name="purpose"
           onChange={handleChange}
@@ -116,8 +118,12 @@ const TransferForm = () => {
       </div>
 
       {/* Submit Button */}
-      <DialogClose className='w-full'>
-        <Button onClick={handleSubmit} className="w-full py-7" disabled={Object.keys(errors).length > 0}>
+      <DialogClose className="w-full">
+        <Button
+          onClick={handleSubmit}
+          className="w-full py-7"
+          disabled={Object.keys(errors).length > 0}
+        >
           Send
         </Button>
       </DialogClose>

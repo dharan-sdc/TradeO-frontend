@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-
+import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
 import PaymentDetailsForm from './PaymentDetailsForm'
 import { Button } from '@/components/ui/button'
@@ -17,20 +17,63 @@ import { getPaymentDetails } from '@/State/Withdrawal/Action'
 import { Badge } from '@/components/ui/badge'
 import { VerifiedIcon } from 'lucide-react'
 
+const ReferAndEarn = ({ referralCode, earnings }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(referralCode);
+    setCopied(true);
+    toast.success("Referral Code Copied!");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+
+
+  return (
+    <div className="max-w-lg mx-auto p-6">
+      <Card className="shadow-lg rounded-2xl p-4 bg-white">
+        <CardContent className="flex flex-col items-center">
+          <h2 className="text-2xl font-bold mb-4">Refer & Earn</h2>
+          <p className="text-gray-600 text-center mb-4">
+            Share your referral code and earn rewards when your friends sign up!
+          </p>
+          <div className="bg-gray-200 px-4 py-2 rounded-lg flex items-center justify-between w-full">
+            <span className="text-lg font-semibold">{referralCode}</span>
+            <Button onClick={handleCopy} className="ml-2">
+              {copied ? "Copied!" : "Copy"}
+            </Button>
+          </div>
+          <p className="text-lg font-semibold text-green-600 mt-4">
+            Earnings: ${earnings}
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+
 const PaymentDetails = () => {
+
   const { withdrawal } = useSelector(store => store);
+    const { auth } = useSelector(store => store)
+  
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getPaymentDetails({ jwt: localStorage.getItem("jwt") }))
 
   }, [])
+
+  const referralCode = auth.user?.referralCode || "TRADEO48097";
+  const earnings = auth.user?.earnings || 0;
+
   console.log("Payment --- ", withdrawal.paymentDetails)
   return (
     <div className='px-20'>
       <h1 className='text-3xl font-bold py-10'>TradeO Deposit Fund Bank Details</h1>
 
-      {withdrawal.paymentDetails ?(
+      {withdrawal.paymentDetails ? (
         <Card className="border border-gray-300 shadow-lg rounded-xl p- bg-white">
           <CardHeader>
             <CardTitle>
@@ -86,7 +129,8 @@ const PaymentDetails = () => {
         </Dialog>)
       }
 
-
+      {/* Refer & Earn */}
+      <ReferAndEarn referralCode={referralCode} earnings={earnings} />
 
     </div >
   )
