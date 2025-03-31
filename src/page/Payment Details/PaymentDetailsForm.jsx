@@ -27,7 +27,7 @@ import { addPaymentDetails } from '@/State/Withdrawal/Action'
 import AccountVerificationForm from './AccountVerificationForm'
 import { VerifiedIcon } from 'lucide-react'
 
-// ✅ Zod Validation Schema
+// Zod Validation Schema
 const paymentSchema = z.object({
   accountHolderName: z.string().min(3, "Account holder name must be at least 3 characters"),
   ifsc: z.string().regex(/^[A-Z]{4}0[A-Z0-9]{6}$/, "Invalid IFSC Code (Example: SBIN0001234)"),
@@ -55,12 +55,12 @@ const PaymentDetailsForm = () => {
     }
   });
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // Track dialog state
+  const [isDialogOpen, setIsDialogOpen] = useState(false); 
 
   const handleVerificationSuccess = () => {
-    setIsTwoFactorEnabled(true); // ✅ Mark 2FA as enabled
-    setTwoFactorError(""); // ✅ Clear error
-    setIsDialogOpen(false); // ✅ Close verification dialog
+    setIsTwoFactorEnabled(true); 
+    setTwoFactorError("");
+    setIsDialogOpen(false); 
   };
 
 

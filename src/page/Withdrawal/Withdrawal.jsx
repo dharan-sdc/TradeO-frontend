@@ -34,7 +34,7 @@ const Withdrawal = () => {
                   </TableCell>
                   <TableCell>{item.method ?? "Bank Account"}</TableCell>
                   <TableCell>₹{item.amount ?? "0.00"}</TableCell>
-                  <TableCell className="text-right">{item.status ?? "Pending"}</TableCell>
+                  <TableCell className="text-right">{item.status ?? "Success"}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

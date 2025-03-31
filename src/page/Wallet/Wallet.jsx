@@ -224,6 +224,7 @@ const Wallet = () => {
               <p className="text-gray-500 text-center">No transactions or orders found</p>
             )}
           </div> */}
+          
           <div className="space-y-5">
             {(order.orders?.length > 0 || wallet.transactions?.length > 0) ? (
               [...(order.orders || []), ...(wallet.transactions || [])]
