@@ -94,11 +94,6 @@ export const paymentHandler = ({ jwt, amount, paymentMethod }) => async (dispatc
     );
     window.location.href = res.data.payment_url;
 
-    // dispatch({
-    //   type:types.DEPOSIT_MONEY_SUCCESS,
-    //   payload:res.data,
-    // });
-
   } catch (error) {
     console.log("Error paymentHandler : ", error);
     dispatch({

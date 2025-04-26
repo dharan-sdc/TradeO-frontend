@@ -20,7 +20,7 @@ import {
   SEARCH_COIN_SUCCESS,
   SEARCH_COIN_FAILURE,
 } from "./ActionType";
-//1:47:40
+
 // Fetch Coin List
 export const getCoinList = (page) => async (dispatch) => {
   dispatch({ type: FETCH_COIN_LIST_REQUEST });
@@ -97,8 +97,6 @@ export const fetchCoinDetails = ({ coinId, jwt }) => async (dispatch) => {
       }
     });
 
-
-
     dispatch({ type: FETCH_COIN_DETAILS_SUCCESS, payload: response.data });
     console.log("Coin Detail by fetch -- :", response.data);
 
@@ -115,7 +113,6 @@ export const fetchCoinDetails = ({ coinId, jwt }) => async (dispatch) => {
 // Search Coin
 export const searchCoin = (keyword) => async (dispatch) => {
   dispatch({ type: SEARCH_COIN_REQUEST });
-
 
   try {
     const response = await api.get(`/coins/search?q=${keyword}`);

@@ -56,7 +56,7 @@ const AccountVerificationForm = ({ onVerificationSuccess }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success("Two-factor authentication enabled successfully!");
-      onVerificationSuccess(); // Update the parent state
+      onVerificationSuccess(); 
 
       console.log(response.data);
     } catch (error) {

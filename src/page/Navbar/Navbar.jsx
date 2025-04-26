@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Command, CommandInput, CommandList, CommandItem, CommandDialog, CommandEmpty, CommandGroup } from '@/components/ui/command';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const { auth } = useSelector(store => store);
@@ -57,15 +58,19 @@ const Navbar = () => {
             <Sidebar />
           </SheetContent>
         </Sheet>
-        
-        
+
+
 
         <div className="px-2 py-3 border-b z-50 bg-background sticky top-0 left-0 right-0 flex justify-between items-center">
-          
+
           <div className="flex items-center gap-3">
             <div>
-              <span className='font-bold text-blue-600'>TradeO</span>
-              <span>Tread</span>
+              <Link to="/">
+                <div className="cursor-pointer">
+                  <span className="font-bold text-blue-600">TradeO</span>
+                  <span> Tread</span>
+                </div>
+              </Link>
             </div>
             {/* <p className="text-sm lg:text-base cursor-pointer">TradeO Trading</p> */}
 
@@ -97,11 +102,13 @@ const Navbar = () => {
 
       {/* User Profile Avatar */}
       <div>
-        <Avatar>
-          <AvatarFallback className="w-10 h-10">
-            {auth.user?.fullName[0].toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+        <Link to="/profile">
+          <Avatar className="cursor-pointer">
+            <AvatarFallback className="w-10 h-10">
+              {auth.user?.fullName[0].toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+        </Link>
       </div>
     </div>
   );

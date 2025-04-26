@@ -23,8 +23,8 @@ const initialState = {
   loading: false,
   error: null,
   jwt: null,
-  resetPasswordSessionId: null, // Add this for reset password flow
-  resetPasswordMessage: null, // Add this for reset password flow
+  resetPasswordSessionId: null, 
+  resetPasswordMessage: null,
 };
 
 const authReducer = (state = initialState, action) => {

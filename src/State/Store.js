@@ -9,11 +9,6 @@ import orderReducer from "./Order/Reducer";
 import assetReducer from "./Asset/Reducer";
 import watchlistReducer from "./Watchlist/Reducer";
 
-
-
-
-
-
 const rootReducer = combineReducers({
   auth: authReducer,
   coin: coinReducer,

@@ -22,9 +22,6 @@ import { fetchCoinDetails } from '@/State/Coin/Action'
 import { existInWatchlist } from '@/Utilis/existInWatchlist'
 
 
-
-
-
 const StockDetails = () => {
 
   const coin = useSelector(store => store.coin)
@@ -53,8 +50,6 @@ const StockDetails = () => {
       jwt: localStorage.getItem("jwt")
     }))
   }
-
-
 
   return (
     <div className='p-5 mt-5'>

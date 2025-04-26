@@ -12,8 +12,6 @@ import api from "@/Config/api";
 export const register = (UserData) => async (dispatch) => {
 
   dispatch({ type: REGISTER_REQUEST })
-  //backend-url
-  // const baseUrl = "http://localhost:8097"
 
   try {
     const response = await api.post(`/auth/signup`, UserData);
@@ -32,8 +30,6 @@ export const register = (UserData) => async (dispatch) => {
 export const login = (UserData) => async (dispatch) => {
 
   dispatch({ type: LOGIN_REQUEST })
-  //backend-url
-
 
   try {
     const response = await api.post(`/auth/signin`, UserData.data);
@@ -44,7 +40,7 @@ export const login = (UserData) => async (dispatch) => {
     localStorage.setItem("jwt", user.jwt);
     UserData.navigate("/")
   } catch (error) {
-    let errorMsg = "An error occurred"; // Default error message
+    let errorMsg = "An error occurred"; 
 
     if (error.response) {
       errorMsg = error.response.data?.message || "Server error occurred";
@@ -63,8 +59,6 @@ export const login = (UserData) => async (dispatch) => {
 export const getUser = (jwt) => async (dispatch) => {
 
   dispatch({ type: GET_USER_REQUEST })
-  //backend-url
-
 
   try {
     const response = await api.get(`/api/users/profile`, {
@@ -74,7 +68,6 @@ export const getUser = (jwt) => async (dispatch) => {
     });
     const user = response.data;
     console.log(user);
-
 
     dispatch({ type: GET_USER_SUCCESS, payload: user })
 
@@ -88,9 +81,9 @@ export const updateProfile = (profileData) => ({
   payload: profileData
 })
 export const logout = () => (dispatch) => {
-  console.log("Logging out..."); // Debugging step
-  localStorage.clear(); // Clear user session data
-  dispatch({ type: LOGOUT }); // Dispatch logout action
+  console.log("Logging out..."); 
+  localStorage.clear();
+  dispatch({ type: LOGOUT });
 };
 
 export const sendResetPasswordOtp = (email) => async (dispatch) => {
@@ -100,11 +93,11 @@ export const sendResetPasswordOtp = (email) => async (dispatch) => {
   try {
     const response = await api.post(`/auth/users/reset-password/send-otp`, {
       sendTo: email,
-      verificationType: "EMAIL", // Ensure verification type is included
+      verificationType: "EMAIL", 
     });
     localStorage.removeItem("otp");
 
-    const sessionId = response.data.session; // Correctly extracting session ID
+    const sessionId = response.data.session; 
     console.log(sessionId)
     dispatch({ type: SEND_RESET_PASSWORD_SUCCESS, payload: sessionId });
     console.log(response.data)
@@ -124,8 +117,8 @@ export const sendResetPasswordOtp = (email) => async (dispatch) => {
 export const verifyResetPasswordOtp = (otp, newPassword) => async (dispatch) => {
   dispatch({ type: VERIFY_RESET_PASSWORD_REQUEST });
 
-  const sessionId = localStorage.getItem("resetSession"); // Ensure it's set
-  const token = localStorage.getItem("jwt"); // Optional
+  const sessionId = localStorage.getItem("resetSession");
+  const token = localStorage.getItem("jwt");
 
   if (!sessionId) {
     console.error("Session ID is missing. Requesting OTP again.");
@@ -136,10 +129,10 @@ export const verifyResetPasswordOtp = (otp, newPassword) => async (dispatch) => 
   try {
     const response = await api.patch(
       `/api/users/reset-password/verify-otp`,
-      { id: sessionId, otp, password: newPassword }, // Send `id` inside JSON, not query param
+      { id: sessionId, otp, password: newPassword },
       {
         headers: {
-          Authorization: token ? `Bearer ${token}` : "",  // Include JWT only if available
+          Authorization: token ? `Bearer ${token}` : "", 
           "Content-Type": "application/json",
         },
       }

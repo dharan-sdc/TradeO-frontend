@@ -32,7 +32,6 @@ const initialState = {
   error: null,
 }
 
-// Reducer for Coin List
 const coinReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_COIN_LIST_REQUEST:
