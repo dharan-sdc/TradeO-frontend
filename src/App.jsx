@@ -8,7 +8,7 @@ import Home from './page/Home/Home';
 import Portfolio from './page/Portfolio/Portfolio';
 import Wallet from './page/Wallet/Wallet';
 import Withdrawal from './page/Withdrawal/Withdrawal';
-import PaymentDetails from './page/PaymentDetails/Paymentdetails';
+import PaymentDetails from './page/PaymentDetails/PaymentDetails';
 import StockDetails from './page/Stock Details/StockDetails';
 import Watchlist from './page/Watchlist/Watchlist';
 import Profile from './page/Profile/Profile';
