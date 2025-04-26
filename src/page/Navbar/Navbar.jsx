@@ -50,7 +50,7 @@ const Navbar = () => {
                   </Avatar>
                   <div>
                     <span className='font-bold text-blue-600'>TradeO</span>
-                    <span>Tread</span>
+                    <span>Coin</span>
                   </div>
                 </div>
               </SheetTitle>
@@ -68,7 +68,7 @@ const Navbar = () => {
               <Link to="/">
                 <div className="cursor-pointer">
                   <span className="font-bold text-blue-600">TradeO</span>
-                  <span> Tread</span>
+                  <span> Coin</span>
                 </div>
               </Link>
             </div>
