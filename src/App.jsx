@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from './State/Auth/Action';
-import Navbar from './page/Navbar/navbar';
+import Navbar from './page/Navbar/Navbar';
 import Activity from './page/Activity/Activity';
 import Home from './page/Home/Home';
 import Portfolio from './page/Portfolio/Portfolio';
