@@ -29,7 +29,7 @@ const Wallet = () => {
   const orderId = query.get("order_id");
   const razorpayPaymentId = query.get("razorpay_payment_id")
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleFetchUserWallet = () => {
     dispatch(getUserWallet(localStorage.getItem("jwt")));
